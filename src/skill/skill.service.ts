@@ -1,4 +1,84 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { SkillCreateDto } from 'src/libs/dto/skill.dto';
+import ErrorHandlerService from 'src/libs/services/errorhandler.service';
+import PrismaService from 'src/libs/services/prisma.service';
+import ResponseService from 'src/libs/services/response.service';
+import SlugService from 'src/libs/services/slug.service';
 
 @Injectable()
-export class SkillService {}
+export class SkillService {
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly response: ResponseService,
+        private readonly slug: SlugService,
+        private readonly errorHandler: ErrorHandlerService,
+    ) { }
+
+    private async isUserExist(userId: number): Promise<boolean> {
+        const isExist = await this.prisma.users.findUnique({
+            where: {
+                id: userId,
+            }
+        });
+
+        if (isExist) return true;
+        return false;
+    }
+
+    async getAllByUserId(userId: number) {
+        try {
+
+            //check user exist
+            if (!this.isUserExist(userId)) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'User not found', null));
+
+            //get user's skills
+            const skills = await this.prisma.skills.findMany({
+                select: {
+                    skill_name: true,
+                },
+                where: {
+                    user_id: userId,
+                }
+            });
+
+            return this.response.create(200, 'Get infomation successfully!', skills);
+
+
+        } catch (error) {
+
+            return this.errorHandler.createError(error.status, error.response);
+
+
+        } finally {
+            await this.prisma.$disconnect();
+        }
+    }
+
+    async addOne(userId: number, data: SkillCreateDto) {
+        try {
+
+            //check user exist
+            if (!this.isUserExist(userId)) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'User not found', null));
+
+            //create skill
+            const newSkill = await this.prisma.skills.create({
+                select: {
+                    skill_name: true,
+                },
+                data: {
+                    skill_name: this.slug.convert(data.skillName),
+                    user_id: userId,
+                }
+            });
+
+            return this.response.create(201, 'Create successfully!', newSkill)
+
+        } catch (error) {
+
+            return this.errorHandler.createError(error.status, error.response);
+
+        } finally {
+            await this.prisma.$disconnect();
+        }
+    }
+}

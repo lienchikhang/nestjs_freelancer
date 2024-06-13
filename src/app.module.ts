@@ -14,6 +14,8 @@ import { RateModule } from './rate/rate.module';
 import { HireModule } from './hire/hire.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from './auth/auth.module';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
@@ -33,7 +35,9 @@ import { JwtModule } from '@nestjs/jwt';
     HireModule,
     JwtModule.register({
       global: true,
-    })
+    }),
+    AuthModule,
+    TokenModule
   ],
   controllers: [AppController],
   providers: [AppService],
