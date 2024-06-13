@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Certifications {
+  id         Int    @id @default(autoincrement())
+  certi_name String @db.VarChar(150)
+  user_id    Int?
+  Users      Users? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Certifications_ibfk_1")
+
+  @@index([user_id], map: "user_id")
+}
+
+model ChildTypes {
+  id              Int    @id @default(autoincrement())
+  child_type_name String @db.VarChar(255)
+  type_id         Int?
+  Types           Types? @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ChildTypes_ibfk_1")
+  Subs            Subs[]
+
+  @@index([type_id], map: "type_id")
+}
+
+model Comments {
+  user_id   Int
+  job_id    Int
+  createdAt DateTime @db.Timestamp(0)
+  content   String   @db.Text
+  isDeleted Boolean? @default(false)
+  Users     Users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Comments_ibfk_1")
+  Jobs      Jobs     @relation(fields: [job_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Comments_ibfk_2")
+
+  @@id([user_id, job_id])
+  @@index([job_id], map: "job_id")
+}
+
+model Hires {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @db.Timestamp(0)
+  isDone     Boolean?  @default(false)
+  user_id    Int?
+  service_id Int?
+  Users      Users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Hires_ibfk_1")
+  Services   Services? @relation(fields: [service_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Hires_ibfk_2")
+
+  @@index([service_id], map: "service_id")
+  @@index([user_id], map: "user_id")
+}
+
+model Jobs {
+  id        Int        @id @default(autoincrement())
+  job_name  String     @db.VarChar(255)
+  job_desc  String     @db.Text
+  job_image String?    @db.VarChar(255)
+  rate      Int?       @default(0)
+  stars     Int?       @default(0) @db.TinyInt
+  isDeleted Boolean?   @default(false)
+  createdAt DateTime   @db.Date
+  sub_id    Int?
+  user_id   Int?
+  Comments  Comments[]
+  Subs      Subs?      @relation(fields: [sub_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Jobs_ibfk_1")
+  Users     Users?     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Jobs_ibfk_2")
+  Rates     Rates[]
+  Services  Services[]
+
+  @@index([sub_id], map: "sub_id")
+  @@index([user_id], map: "user_id")
+}
+
+model Rates {
+  user_id   Int
+  job_id    Int
+  createdAt DateTime @db.Timestamp(0)
+  rate_num  Int
+  Users     Users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Rates_ibfk_1")
+  Jobs      Jobs     @relation(fields: [job_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Rates_ibfk_2")
+
+  @@id([user_id, job_id])
+  @@index([job_id], map: "job_id")
+}
+
+model Services {
+  id              Int      @id @default(autoincrement())
+  price           Int
+  service_desc    String?  @db.VarChar(255)
+  service_beneift String?  @db.VarChar(255)
+  delivery_date   DateTime @db.Timestamp(0)
+  job_id          Int?
+  Hires           Hires[]
+  Jobs            Jobs?    @relation(fields: [job_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Services_ibfk_1")
+
+  @@index([job_id], map: "job_id")
+}
+
+model Skills {
+  id         Int    @id @default(autoincrement())
+  skill_name String @db.VarChar(150)
+  user_id    Int?
+  Users      Users? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Skills_ibfk_1")
+
+  @@index([user_id], map: "user_id")
+}
+
+model Subs {
+  id            Int         @id @default(autoincrement())
+  sub_name      String      @db.VarChar(255)
+  child_type_id Int?
+  Jobs          Jobs[]
+  ChildTypes    ChildTypes? @relation(fields: [child_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Subs_ibfk_1")
+
+  @@index([child_type_id], map: "child_type_id")
+}
+
+model Types {
+  id         Int          @id @default(autoincrement())
+  type_name  String       @db.VarChar(255)
+  ChildTypes ChildTypes[]
+}
+
+model Users {
+  id              Int              @id @default(autoincrement())
+  full_name       String           @db.VarChar(200)
+  email           String           @db.VarChar(255)
+  password        String           @db.VarChar(255)
+  phone           String?          @db.VarChar(11)
+  birth_day       DateTime?        @db.Date
+  gender          Boolean?         @db.Bit(1)
+  role            String?          @default("user") @db.VarChar(100)
+  joinAt          DateTime         @db.Date
+  isDeleted       Boolean?         @default(false)
+  isBlocked       Boolean?         @default(false)
+  avatar          String?          @db.VarChar(255)
+  point           Int?             @default(100)
+  facebook_app_id String?          @db.VarChar(255)
+  google_app_id   String?          @db.VarChar(255)
+  Certifications  Certifications[]
+  Comments        Comments[]
+  Hires           Hires[]
+  Jobs            Jobs[]
+  Rates           Rates[]
+  Skills          Skills[]
+}
