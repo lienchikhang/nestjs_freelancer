@@ -7,7 +7,7 @@ class BcryptService {
         return hashSync(value, 7);
     }
 
-    public decode(hash: string, value: string): boolean {
+    public compare(hash: string, value: string): boolean {
         return compareSync(value, hash);
     }
 }

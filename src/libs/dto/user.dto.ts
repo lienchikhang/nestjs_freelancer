@@ -13,3 +13,13 @@ export class UserCreateDto {
     @IsStrongPassword()
     password: string
 }
+
+export class UserLoginDto {
+    @IsNotEmpty()
+    @IsEmail()
+    email: string
+
+    @IsNotEmpty()
+    @IsString()
+    password: string
+}
