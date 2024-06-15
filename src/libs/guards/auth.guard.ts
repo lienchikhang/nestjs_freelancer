@@ -4,9 +4,10 @@ import { verify, decode, TokenExpiredError } from 'jsonwebtoken';
 import { ConfigService } from "@nestjs/config";
 import { TokenService } from "src/token/token.service";
 import { IAuthPayload } from "../interfaces";
-import ResponseService from "../services/response.service";
-import ErrorHandlerService from "../services/errorhandler.service";
+
 import { PrismaService } from "src/prisma/prisma.service";
+import { ResponseService } from "src/response/response.service";
+import { ErrorHandlerService } from "src/error-handler/error-handler.service";
 
 @Injectable()
 class AuthGuard implements CanActivate {

@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeService } from './type.service';
 import { TypeController } from './type.controller';
+import SlugService from 'src/libs/services/slug.service';
 
 @Module({
   controllers: [TypeController],
-  providers: [TypeService],
+  providers: [TypeService, SlugService],
 })
-export class TypeModule {}
+export class TypeModule { }

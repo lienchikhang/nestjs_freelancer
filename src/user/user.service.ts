@@ -1,10 +1,11 @@
 import { ConflictException, HttpCode, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { ErrorHandlerService } from 'src/error-handler/error-handler.service';
 import { UserCreateDto, UserUpdateDto } from 'src/libs/dto/user.dto';
 import BcryptService from 'src/libs/services/bcrypt.service';
-import ErrorHandlerService from 'src/libs/services/errorhandler.service';
-import ResponseService from 'src/libs/services/response.service';
+
 import SlugService from 'src/libs/services/slug.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ResponseService } from 'src/response/response.service';
 
 @Injectable()
 export class UserService {

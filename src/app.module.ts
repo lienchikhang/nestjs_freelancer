@@ -17,6 +17,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { ErrorHandlerModule } from './error-handler/error-handler.module';
+import { ResponseModule } from './response/response.module';
 
 @Module({
   imports: [
@@ -40,7 +42,9 @@ import { PrismaModule } from './prisma/prisma.module';
     }),
     AuthModule,
     TokenModule,
-    PrismaModule
+    PrismaModule,
+    ErrorHandlerModule,
+    ResponseModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,12 +1,7 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
-class ErrorHandlerService {
-
-    // constructor(
-    //     private readonly errorHandler: ErrorHandlerService,
-    // ) {}
-
+export class ErrorHandlerService {
     public createError(type: number, error: any) {
         console.log({ error });
         switch (type) {
@@ -25,7 +20,3 @@ class ErrorHandlerService {
         }
     }
 }
-
-
-
-export default ErrorHandlerService;

@@ -2,8 +2,8 @@ import { Global, Injectable } from '@nestjs/common';
 import { ErrorHandler } from '@nestjs/common/interfaces';
 import { ConfigService } from '@nestjs/config';
 import { decode, verify, sign } from 'jsonwebtoken';
-import ErrorHandlerService from 'src/libs/services/errorhandler.service';
 import { KeyObject, generateKeyPairSync } from 'crypto';
+import { ErrorHandlerService } from 'src/error-handler/error-handler.service';
 
 @Injectable()
 export class TokenService {

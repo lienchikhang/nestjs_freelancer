@@ -4,8 +4,6 @@ import { AuthController } from './auth.controller';
 import { UserService } from 'src/user/user.service';
 import SlugService from 'src/libs/services/slug.service';
 import BcryptService from 'src/libs/services/bcrypt.service';
-import ResponseService from 'src/libs/services/response.service';
-import ErrorHandlerService from 'src/libs/services/errorhandler.service';
 import { TokenService } from 'src/token/token.service';
 
 @Module({
@@ -15,8 +13,6 @@ import { TokenService } from 'src/token/token.service';
     UserService,
     SlugService,
     BcryptService,
-    ResponseService,
-    ErrorHandlerService,
     TokenService,
   ],
 })

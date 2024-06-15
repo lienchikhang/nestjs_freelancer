@@ -18,10 +18,11 @@ model Certifications {
 }
 
 model ChildTypes {
-  id              Int    @id @default(autoincrement())
-  child_type_name String @db.VarChar(255)
+  id              Int      @id @default(autoincrement())
+  child_type_name String   @db.VarChar(255)
   type_id         Int?
-  Types           Types? @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ChildTypes_ibfk_1")
+  isDeleted       Boolean? @default(false)
+  Types           Types?   @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ChildTypes_ibfk_1")
   Subs            Subs[]
 
   @@index([type_id], map: "type_id")
@@ -113,6 +114,7 @@ model Subs {
   id            Int         @id @default(autoincrement())
   sub_name      String      @db.VarChar(255)
   child_type_id Int?
+  isDeleted     Boolean?    @default(false)
   Jobs          Jobs[]
   ChildTypes    ChildTypes? @relation(fields: [child_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Subs_ibfk_1")
 
@@ -122,6 +124,7 @@ model Subs {
 model Types {
   id         Int          @id @default(autoincrement())
   type_name  String       @db.VarChar(255)
+  isDeleted  Boolean?     @default(false)
   ChildTypes ChildTypes[]
 }
 

@@ -1,8 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
-class ResponseService {
-
+export class ResponseService {
     public create(status: number, mess: string, content: any, options?: any[]) {
         return {
             status,
@@ -13,5 +12,3 @@ class ResponseService {
         }
     }
 }
-
-export default ResponseService
