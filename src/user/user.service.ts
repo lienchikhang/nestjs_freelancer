@@ -29,6 +29,9 @@ export class UserService {
                     Skills: {
                         select: {
                             skill_name: true,
+                        },
+                        where: {
+                            isDeleted: false,
                         }
                     },
                     Certifications: {

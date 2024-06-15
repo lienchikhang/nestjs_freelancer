@@ -4,3 +4,8 @@ export interface IAuthPayload {
     iat: number,
     exp: number
 }
+
+export interface IAuthUser {
+    userId: number,
+    role: string,
+}

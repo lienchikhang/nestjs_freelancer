@@ -8,10 +8,11 @@ datasource db {
 }
 
 model Certifications {
-  id         Int    @id @default(autoincrement())
-  certi_name String @db.VarChar(150)
+  id         Int      @id @default(autoincrement())
+  certi_name String   @db.VarChar(150)
   user_id    Int?
-  Users      Users? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Certifications_ibfk_1")
+  isDeleted  Boolean? @default(false)
+  Users      Users?   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Certifications_ibfk_1")
 
   @@index([user_id], map: "user_id")
 }
@@ -99,10 +100,11 @@ model Services {
 }
 
 model Skills {
-  id         Int    @id @default(autoincrement())
-  skill_name String @db.VarChar(150)
+  id         Int      @id @default(autoincrement())
+  skill_name String   @db.VarChar(150)
   user_id    Int?
-  Users      Users? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Skills_ibfk_1")
+  isDeleted  Boolean? @default(false)
+  Users      Users?   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Skills_ibfk_1")
 
   @@index([user_id], map: "user_id")
 }

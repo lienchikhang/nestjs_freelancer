@@ -81,4 +81,46 @@ export class SkillService {
             await this.prisma.$disconnect();
         }
     }
+
+    async delete(userId: number, skillId: number) {
+        try {
+
+            //check skill exist
+            const isExist = await this.prisma.skills.findUnique({
+                where: {
+                    id: skillId
+                }
+            });
+
+            if (!isExist) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'Skill not found', null));
+
+            const state = await this.prisma.skills.update({
+                select: {
+                    skill_name: true,
+                },
+                where: {
+                    id: skillId,
+                    AND: [
+                        {
+                            user_id: userId,
+                        }
+                    ]
+                },
+                data: {
+                    isDeleted: true,
+                }
+            });
+
+            console.log({ state })
+
+            return this.response.create(HttpStatus.OK, 'Delete successfully!', state);
+
+        } catch (error) {
+
+            return this.errorHandler.createError(error.status, error.response);
+
+        } finally {
+            await this.prisma.$disconnect();
+        }
+    }
 }

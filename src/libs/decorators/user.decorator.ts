@@ -1,4 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { IAuthUser } from '../interfaces';
 
 export const User = createParamDecorator(
     (data: unknown, ctx: ExecutionContext) => {
@@ -6,6 +7,6 @@ export const User = createParamDecorator(
         return {
             userId: request.user.userId,
             role: request.user.role,
-        };
+        } as IAuthUser;
     },
 );
