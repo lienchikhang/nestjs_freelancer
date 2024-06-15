@@ -16,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -38,7 +39,8 @@ import { TokenModule } from './token/token.module';
       global: true,
     }),
     AuthModule,
-    TokenModule
+    TokenModule,
+    PrismaModule
   ],
   controllers: [AppController],
   providers: [AppService],

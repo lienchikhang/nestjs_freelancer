@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
 import { Observable, tap } from "rxjs";
+import { PrismaService } from "src/prisma/prisma.service";
 import { TokenService } from "src/token/token.service";
-import PrismaService from "../services/prisma.service";
 
 @Injectable()
 class RenewalInterceptor implements NestInterceptor {

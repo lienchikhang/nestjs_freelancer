@@ -3,10 +3,10 @@ import { Observable } from "rxjs";
 import { verify, decode, TokenExpiredError } from 'jsonwebtoken';
 import { ConfigService } from "@nestjs/config";
 import { TokenService } from "src/token/token.service";
-import PrismaService from "../services/prisma.service";
 import { IAuthPayload } from "../interfaces";
 import ResponseService from "../services/response.service";
 import ErrorHandlerService from "../services/errorhandler.service";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 class AuthGuard implements CanActivate {

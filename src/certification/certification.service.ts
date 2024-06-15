@@ -1,9 +1,9 @@
 import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CertiCreateDto } from 'src/libs/dto/certi.dto';
 import ErrorHandlerService from 'src/libs/services/errorhandler.service';
-import PrismaService from 'src/libs/services/prisma.service';
 import ResponseService from 'src/libs/services/response.service';
 import SlugService from 'src/libs/services/slug.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CertificationService {
