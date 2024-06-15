@@ -1,4 +1,6 @@
 import { BadRequestException, ConflictException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { generateKeyPairSync } from 'crypto';
 import { UserCreateDto, UserLoginDto } from 'src/libs/dto/user.dto';
 import BcryptService from 'src/libs/services/bcrypt.service';
 import ErrorHandlerService from 'src/libs/services/errorhandler.service';
@@ -16,6 +18,7 @@ export class AuthService {
         private readonly bcrypt: BcryptService,
         private readonly errorHandler: ErrorHandlerService,
         private readonly token: TokenService,
+        private readonly config: ConfigService,
     ) { }
 
     async register(data: UserCreateDto) {
@@ -84,12 +87,39 @@ export class AuthService {
                 role: isExist.role
             });
 
+            //save token
+            await this.prisma.users.update({
+                data: {
+                    token,
+                },
+                where: {
+                    id: isExist.id,
+                }
+            });
+
             return this.response.create(HttpStatus.OK, 'Login successfully!', token);
 
         } catch (error) {
 
             return this.errorHandler.createError(error.status, error.response);
 
+        } finally {
+            await this.prisma.$disconnect();
+        }
+    }
+
+    async logout(userId: number) {
+        try {
+            await this.prisma.users.update({
+                data: {
+                    token: null,
+                },
+                where: {
+                    id: userId,
+                }
+            })
+        } catch (error) {
+            return this.errorHandler.createError(error.status, error.response);
         } finally {
             await this.prisma.$disconnect();
         }

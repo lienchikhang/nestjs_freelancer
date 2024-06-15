@@ -21,6 +21,7 @@ import { TokenModule } from './token/token.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+
     }),
     SkillModule,
     CertificationModule,

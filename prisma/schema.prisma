@@ -139,10 +139,16 @@ model Users {
   point           Int?             @default(100)
   facebook_app_id String?          @db.VarChar(255)
   google_app_id   String?          @db.VarChar(255)
+  token           String?          @db.VarChar(255)
   Certifications  Certifications[]
   Comments        Comments[]
   Hires           Hires[]
   Jobs            Jobs[]
   Rates           Rates[]
   Skills          Skills[]
+}
+
+model PublicKeys {
+  id         Int     @id @default(autoincrement())
+  public_key String? @db.VarChar(255)
 }
