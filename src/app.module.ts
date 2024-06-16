@@ -19,6 +19,8 @@ import { TokenModule } from './token/token.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ErrorHandlerModule } from './error-handler/error-handler.module';
 import { ResponseModule } from './response/response.module';
+import { CompressModule } from './compress/compress.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -44,7 +46,9 @@ import { ResponseModule } from './response/response.module';
     TokenModule,
     PrismaModule,
     ErrorHandlerModule,
-    ResponseModule
+    ResponseModule,
+    CompressModule,
+    CloudinaryModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,10 +1,11 @@
-import { Body, Controller, Get, HttpCode, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { JobService } from './job.service';
-import { JobCreateDto } from 'src/libs/dto';
+import { JobCreateDto, JobUpdateDto } from 'src/libs/dto';
 import { Auth } from 'src/libs/decorators/common.decorator';
 import { User } from 'src/libs/decorators/user.decorator';
 import { RoleAuth } from 'src/libs/guards/role.guard';
 import { ROLE } from 'src/libs/enum';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('job')
 export class JobController {
@@ -30,6 +31,14 @@ export class JobController {
     );
   }
 
+  @Get('get/:id')
+  @HttpCode(200)
+  getDetail(
+    @Param('id') id: string
+  ) {
+    return this.jobService.getDetail(Number(id));
+  }
+
   @Post('add')
   @HttpCode(201)
   @UseGuards(new RoleAuth([ROLE.SELLER]))
@@ -39,5 +48,41 @@ export class JobController {
     @User() user,
   ) {
     return this.jobService.addOne(user.userId, data);
+  }
+
+  @Patch('delete/:id')
+  @HttpCode(200)
+  @UseGuards(new RoleAuth([ROLE.SELLER]))
+  @Auth()
+  delete(
+    @Param('id') id: string,
+    @User() user,
+  ) {
+    return this.jobService.deleteOne(user.userId, Number(id));
+  }
+
+  @Patch('update/:id')
+  @HttpCode(200)
+  @UseGuards(new RoleAuth([ROLE.SELLER]))
+  @Auth()
+  update(
+    @Body() data: JobUpdateDto,
+    @Param('id') id: string,
+    @User() user,
+  ) {
+    return this.jobService.update(user.userId, Number(id), data);
+  }
+
+  @Post('upload/:id')
+  @HttpCode(200)
+  @UseGuards(new RoleAuth([ROLE.SELLER]))
+  @Auth()
+  @UseInterceptors(FileInterceptor('file'))
+  upload(
+    @User() user,
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.jobService.uploadImage(file, Number(id), user.userId);
   }
 }

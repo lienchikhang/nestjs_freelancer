@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class JobCreateDto {
     @IsNotEmpty()
@@ -9,6 +9,23 @@ export class JobCreateDto {
     @IsString()
     jobDesc: string
 
+    @IsNotEmpty()
+    @IsNumber()
+    subId: number
+}
+
+export class JobUpdateDto {
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    jobName: string
+
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    jobDesc: string
+
+    @IsOptional()
     @IsNotEmpty()
     @IsNumber()
     subId: number
