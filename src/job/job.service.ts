@@ -339,7 +339,6 @@ export class JobService {
     }
 
     async uploadImage(file: Express.Multer.File, jobId: number, userId: number) {
-        console.log({ file });
         if (!file) throw new BadRequestException(this.response.create(HttpStatus.BAD_REQUEST, 'No file upload', null));
 
         //check jobExist

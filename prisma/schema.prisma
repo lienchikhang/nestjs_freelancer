@@ -126,6 +126,7 @@ model Types {
   id         Int          @id @default(autoincrement())
   type_name  String       @db.VarChar(255)
   isDeleted  Boolean?     @default(false)
+  image      String?      @db.VarChar(255)
   ChildTypes ChildTypes[]
 }
 

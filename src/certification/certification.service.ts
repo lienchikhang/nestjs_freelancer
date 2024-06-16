@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { ErrorHandlerService } from 'src/error-handler/error-handler.service';
 import { CertiCreateDto } from 'src/libs/dto/certi.dto';
+import { CheckService } from 'src/libs/services/check.service';
 
 import SlugService from 'src/libs/services/slug.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -13,24 +14,15 @@ export class CertificationService {
         private readonly response: ResponseService,
         private readonly slug: SlugService,
         private readonly errorHandler: ErrorHandlerService,
+        private readonly checkService: CheckService,
     ) { }
 
-    private async isUserExist(userId: number): Promise<boolean> {
-        const isExist = await this.prisma.certifications.findFirst({
-            where: {
-                user_id: userId,
-            }
-        });
-
-        if (isExist) return true;
-        return false;
-    }
 
     async getAllByUserId(userId: number) {
         try {
 
             //check user exist
-            if (!this.isUserExist(userId)) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'User not found', null));
+            this.checkService.isUserExist(userId);
 
             //get user's skills
             const certies = await this.prisma.certifications.findMany({
@@ -60,7 +52,7 @@ export class CertificationService {
         try {
 
             //check user exist
-            if (!this.isUserExist(userId)) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'User not found', null));
+            this.checkService.isUserExist(userId);
 
             //create skill
             const newCerti = await this.prisma.certifications.create({

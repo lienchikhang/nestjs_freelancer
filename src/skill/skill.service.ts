@@ -1,6 +1,8 @@
 import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { ErrorHandlerService } from 'src/error-handler/error-handler.service';
 import { SkillCreateDto } from 'src/libs/dto/skill.dto';
+import { MODULE } from 'src/libs/enum';
+import { CheckService } from 'src/libs/services/check.service';
 
 import SlugService from 'src/libs/services/slug.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -13,24 +15,14 @@ export class SkillService {
         private readonly response: ResponseService,
         private readonly slug: SlugService,
         private readonly errorHandler: ErrorHandlerService,
+        private readonly checkService: CheckService,
     ) { }
-
-    private async isUserExist(userId: number): Promise<boolean> {
-        const isExist = await this.prisma.users.findUnique({
-            where: {
-                id: userId,
-            }
-        });
-
-        if (isExist) return true;
-        return false;
-    }
 
     async getAllByUserId(userId: number) {
         try {
 
             //check user exist
-            if (!this.isUserExist(userId)) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'User not found', null));
+            this.checkService.scan(MODULE.USER, userId);
 
             //get user's skills
             const skills = await this.prisma.skills.findMany({
@@ -59,7 +51,7 @@ export class SkillService {
         try {
 
             //check user exist
-            if (!this.isUserExist(userId)) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'User not found', null));
+            this.checkService.scan(MODULE.USER, userId);
 
             //create skill
             const newSkill = await this.prisma.skills.create({

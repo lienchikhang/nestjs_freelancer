@@ -4,10 +4,10 @@ import Jimp from 'jimp';
 @Injectable()
 export class CompressService {
 
-    async compress(imageData: Buffer, quality: number = 10) {
+    async compress(imageData: Buffer, quality: number = 10, type: string = 'jpeg') {
         const image = await Jimp.read(imageData)
         image.quality(quality);
-        const compressedImage = await image.getBufferAsync(Jimp.MIME_JPEG);
+        const compressedImage = await image.getBufferAsync(type == 'jpeg' ? Jimp.MIME_JPEG : Jimp.MIME_PNG);
         return compressedImage;
     }
 

@@ -3,13 +3,9 @@ import { JobService } from './job.service';
 import { JobController } from './job.controller';
 import SlugService from 'src/libs/services/slug.service';
 import { MulterModule } from '@nestjs/platform-express';
+import multer from 'multer';
 
 @Module({
-  imports: [
-    // MulterModule.register({
-
-    // })
-  ],
   controllers: [JobController],
   providers: [JobService, SlugService],
 })

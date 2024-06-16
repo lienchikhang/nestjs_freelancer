@@ -1,6 +1,10 @@
 import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CompressService } from 'src/compress/compress.service';
 import { ErrorHandlerService } from 'src/error-handler/error-handler.service';
 import { TypeCreateDto } from 'src/libs/dto/type.dto';
+import { MODULE } from 'src/libs/enum';
+import { CheckService } from 'src/libs/services/check.service';
 import SlugService from 'src/libs/services/slug.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ResponseService } from 'src/response/response.service';
@@ -12,6 +16,9 @@ export class TypeService {
         private readonly response: ResponseService,
         private readonly slug: SlugService,
         private readonly errorHandler: ErrorHandlerService,
+        private readonly checkService: CheckService,
+        private readonly compress: CompressService,
+        private readonly cloudinary: CloudinaryService,
     ) {
     }
 
@@ -181,5 +188,37 @@ export class TypeService {
         } finally {
             await this.prisma.$disconnect();
         }
+    }
+
+    async uploadImage(typeId: number, file: Express.Multer.File) {
+        try {
+            if (!file) throw new BadRequestException(this.response.create(HttpStatus.BAD_REQUEST, 'No file upload ', null));
+
+            this.checkService.scan(MODULE.TYPE, typeId);
+
+            const originalImageData = file.buffer;
+
+            const compressedImageData = await this.compress.compress(originalImageData, 10, 'png');
+
+            const response = await this.cloudinary.upload(compressedImageData);
+
+            if (response) {
+                await this.prisma.types.update({
+                    where: {
+                        id: typeId,
+                    },
+                    data: {
+                        image: response.url,
+                    }
+                })
+            }
+            return this.response.create(HttpStatus.OK, 'Upload successfully!', response);
+        } catch (error) {
+            console.log({ error })
+            return this.errorHandler.createError(error.status, error.response);
+        } finally {
+            await this.prisma.$disconnect();
+        }
+
     }
 }
