@@ -13,6 +13,19 @@ class SlugService {
 
         return noAccentString;
     }
+
+    public revert(value: string): string {
+        return value.replace(/&/g, ' & ')
+            // Chia các từ bằng dấu -
+            .split('-')
+            // Chuyển đổi các từ thành dạng chữ hoa đầu từ
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            // Kết hợp các từ lại thành chuỗi
+            .join(' ')
+            // Loại bỏ khoảng trắng thừa
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
 }
 
 export default SlugService;

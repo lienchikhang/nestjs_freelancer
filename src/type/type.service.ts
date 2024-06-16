@@ -15,7 +15,7 @@ export class TypeService {
     ) {
     }
 
-    async getAll() {
+    async getAllInOne() {
         try {
 
             const types = await this.prisma.types.findMany({
@@ -46,7 +46,58 @@ export class TypeService {
                 }
             });
 
-            return this.response.create(HttpStatus.OK, 'Get successfully!', types);
+            const revertTypes = types.map((type) => {
+                const typeName = this.slug.revert(type.type_name);
+                const revertChildTypes = type.ChildTypes.map((child) => {
+                    const revertSubs = child.Subs.map((sub) => {
+                        return {
+                            ...sub,
+                            sub_name: this.slug.revert(sub.sub_name),
+                        }
+                    })
+                    return {
+                        ...child,
+                        child_type_name: this.slug.revert(child.child_type_name),
+                        Subs: revertSubs
+                    }
+                })
+                return {
+                    ...type,
+                    ChildTypes: revertChildTypes,
+                    type_name: typeName,
+                }
+            })
+
+            return this.response.create(HttpStatus.OK, 'Get successfully!', revertTypes);
+
+        } catch (error) {
+            return this.errorHandler.createError(error.status, error.response);
+        } finally {
+            await this.prisma.$disconnect();
+        }
+    }
+
+    async getOnlyType() {
+        try {
+
+            const types = await this.prisma.types.findMany({
+                select: {
+                    type_name: true,
+                    id: true,
+                },
+                where: {
+                    isDeleted: false,
+                }
+            });
+
+            const revertTypes = types.map((type) => {
+                return {
+                    ...type,
+                    type_name: this.slug.revert(type.type_name)
+                }
+            });
+
+            return this.response.create(HttpStatus.OK, 'Get successfully!', revertTypes);
 
         } catch (error) {
             return this.errorHandler.createError(error.status, error.response);

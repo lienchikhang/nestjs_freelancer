@@ -62,9 +62,9 @@ model Jobs {
   rate      Int?       @default(0)
   stars     Int?       @default(0) @db.TinyInt
   isDeleted Boolean?   @default(false)
-  createdAt DateTime   @db.Date
   sub_id    Int?
   user_id   Int?
+  createdAt DateTime?  @db.DateTime(0)
   Comments  Comments[]
   Subs      Subs?      @relation(fields: [sub_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Jobs_ibfk_1")
   Users     Users?     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Jobs_ibfk_2")
@@ -94,6 +94,7 @@ model Services {
   service_beneift String?  @db.VarChar(255)
   delivery_date   DateTime @db.Timestamp(0)
   job_id          Int?
+  service_level   String?  @default("BASIC") @db.VarChar(100)
   Hires           Hires[]
   Jobs            Jobs?    @relation(fields: [job_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Services_ibfk_1")
 

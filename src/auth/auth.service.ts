@@ -31,6 +31,8 @@ export class AuthService {
                 }
             });
 
+            console.log({ isExist })
+
             if (isExist) throw new ConflictException(this.response.create(HttpStatus.CONFLICT, 'Email has already existed', data.email));
 
             //hash password
@@ -74,7 +76,7 @@ export class AuthService {
                 }
             });
 
-            if (!isExist) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'User not found', null));
+            if (!isExist) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'Email or password is wrong', null));
 
             //check password
             const isValidPass = this.bcrypt.compare(isExist.password, password);

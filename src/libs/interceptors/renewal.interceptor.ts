@@ -22,13 +22,7 @@ class RenewalInterceptor implements NestInterceptor {
         //check expired soon
         const currentTime = Date.now();
         const expiredTime = exp * 1000;
-        const rs = expiredTime - currentTime;
         const isExpiringSoon = expiredTime - currentTime <= 1 * 60 * 1000;
-
-        // const isExpiringSoon = timeLeft <= fiveMinites;
-
-
-        console.log({ currentTime, expiredTime, isExpiringSoon, user });
 
         if (isExpiringSoon) {
             const newToken = this.tokenService.sign(req.user);
@@ -42,17 +36,15 @@ class RenewalInterceptor implements NestInterceptor {
                 data: {
                     token: newToken,
                 }
-            })
+            });
 
-            return next.handle().pipe(tap((data) => res.cookie('token', newToken, {
+            res.cookie('token', newToken, {
                 httpOnly: true,
-            })))
+            })
         }
 
-        return next.handle().pipe(tap((data) => data))
-
+        return next.handle();
     }
-
 }
 
 export default RenewalInterceptor;

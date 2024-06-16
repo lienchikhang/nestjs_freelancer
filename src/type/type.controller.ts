@@ -13,7 +13,13 @@ export class TypeController {
   @Get('get-all')
   @HttpCode(200)
   getAll() {
-    return this.typeService.getAll();
+    return this.typeService.getAllInOne();
+  }
+
+  @Get('get-only')
+  @HttpCode(200)
+  getOnlyType() {
+    return this.typeService.getOnlyType();
   }
 
   @Post('add')

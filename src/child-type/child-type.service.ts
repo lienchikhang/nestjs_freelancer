@@ -18,10 +18,19 @@ export class ChildTypeService {
     async getAllByTypeId(typeId: number) {
         try {
 
-            const types = await this.prisma.childTypes.findMany({
+            let childTypes = await this.prisma.childTypes.findMany({
                 select: {
                     child_type_name: true,
                     id: true,
+                    Subs: {
+                        select: {
+                            id: true,
+                            sub_name: true,
+                        },
+                        where: {
+                            isDeleted: false,
+                        }
+                    }
                 },
                 where: {
                     isDeleted: false,
@@ -33,7 +42,15 @@ export class ChildTypeService {
                 }
             });
 
-            return this.response.create(HttpStatus.OK, 'Get successfully!', types);
+            const newChildTypes = childTypes.map((childType) => {
+                const revert = this.slug.revert(childType.child_type_name);
+                return {
+                    ...childType,
+                    child_type_name: revert,
+                }
+            })
+
+            return this.response.create(HttpStatus.OK, 'Get successfully!', newChildTypes);
 
         } catch (error) {
             return this.errorHandler.createError(error.status, error.response);

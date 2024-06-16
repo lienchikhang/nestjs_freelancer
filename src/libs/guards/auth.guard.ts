@@ -27,7 +27,7 @@ class AuthGuard implements CanActivate {
 
             const token = request.cookies['token'];
 
-            if (!token) return false;
+            if (!token) throw new UnauthorizedException(this.response.create(HttpStatus.UNAUTHORIZED, 'Please login to do this action', null));;
 
             const { userId, role, exp } = this.tokenService.decode(token) as IAuthPayload;
 
@@ -59,7 +59,8 @@ class AuthGuard implements CanActivate {
                 throw new UnauthorizedException(this.response.create(HttpStatus.UNAUTHORIZED, 'LoginExpired', null));
             }
 
-            this.errorHandler.createError(error.status, error.respones);
+            console.log('error in auth', error);
+            this.errorHandler.createError(error.status, error.response);
         }
 
     }

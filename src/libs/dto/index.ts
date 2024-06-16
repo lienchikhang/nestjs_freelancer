@@ -1,3 +1,7 @@
 export * from './skill.dto';
 export * from './user.dto';
 export * from './childType.dto';
+export * from './certi.dto';
+export * from './sub.dto';
+export * from './type.dto';
+export * from './job.dto';
