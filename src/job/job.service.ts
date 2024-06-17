@@ -98,9 +98,9 @@ export class JobService {
                 take: pageSize,
                 skip: (page - 1) * pageSize,
                 orderBy: orderBy ? {
-                    [orderBy]: sort as 'asc' | 'desc'
+                    [orderBy]: sort.trim() as 'asc' | 'desc'
                 } : {
-                    id: sort as 'asc' | 'desc'
+                    id: sort.trim() as 'asc' | 'desc'
                 },
             });
 
@@ -109,7 +109,9 @@ export class JobService {
                     ...job,
                     job_name: this.slug.revert(job.job_name)
                 }
-            })
+            });
+
+            console.log({ jobs })
 
             const totalJobs = await this.prisma.jobs.count({
                 where: defaultConditionCountPage,
@@ -123,6 +125,7 @@ export class JobService {
             });
 
         } catch (error) {
+            console.log({ error })
             return this.errorHanlder.createError(error.status, error.response);
         } finally {
             await this.prisma.$disconnect();
@@ -351,6 +354,8 @@ export class JobService {
     async uploadImage(file: Express.Multer.File, jobId: number, userId: number) {
         try {
 
+            console.log({ file, jobId, userId })
+
             if (!file) throw new BadRequestException(this.response.create(HttpStatus.BAD_REQUEST, 'No file upload', null));
 
             //check jobExist
@@ -386,7 +391,7 @@ export class JobService {
                 })
             }
 
-            return this.response.create(HttpStatus.OK, 'Upload successfully!', response)
+            return this.response.create(HttpStatus.OK, 'Upload successfully!', response.url)
 
         } catch (error) {
             return this.errorHanlder.createError(error.status, error.response);

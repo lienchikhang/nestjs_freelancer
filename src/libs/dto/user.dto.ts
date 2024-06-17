@@ -25,18 +25,6 @@ export class UserUpdateDto {
     @IsStrongPassword()
     password: string
 
-    @IsOptional()
-    @IsPhoneNumber()
-    phone: string
-
-
-    @IsOptional()
-    @IsDate()
-    birth_day: Date
-
-    @IsOptional()
-    gender: boolean
-
 }
 
 export class UserLoginDto {

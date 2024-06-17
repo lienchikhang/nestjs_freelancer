@@ -6,3 +6,4 @@ export * from './sub.dto';
 export * from './type.dto';
 export * from './job.dto';
 export * from './service.dto';
+export * from './hire.dto';

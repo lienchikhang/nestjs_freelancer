@@ -15,10 +15,11 @@ export class ServiceController {
   @UseGuards(new RoleAuth([ROLE.SELLER]))
   @Auth()
   create(
+    @User() user,
     @Body() createServiceDto: CreateServiceDto,
     @Param('jobId') jobId: string,
   ) {
-    return this.serviceService.create(Number(jobId), createServiceDto);
+    return this.serviceService.create(user.userId, Number(jobId), createServiceDto);
   }
 
   @Get('get-by-job-id/:id')

@@ -60,7 +60,7 @@ export class UserService {
         }
     }
 
-    async updateInfo(userId: number, { full_name, birth_day, gender, password, phone }: UserUpdateDto) {
+    async updateInfo(userId: number, { full_name, password }: UserUpdateDto) {
 
         try {
             let dataNeedUpdate = {}
@@ -81,40 +81,13 @@ export class UserService {
                 }
             }
 
-            //case gender
-            if (gender) {
-                dataNeedUpdate = {
-                    ...dataNeedUpdate,
-                    gender,
-                }
-            }
-
-            //case phone
-            if (phone) {
-                dataNeedUpdate = {
-                    ...dataNeedUpdate,
-                    phone,
-                }
-            }
-
-            //case birthday
-            if (birth_day) {
-                dataNeedUpdate = {
-                    ...dataNeedUpdate,
-                    birth_day,
-                }
-            }
-
             //update
             const userUpdated = await this.prisma.users.update({
                 select: {
                     avatar: true,
                     full_name: true,
-                    gender: true,
                     email: true,
                     joinAt: true,
-                    phone: true,
-                    birth_day: true,
                 },
                 data: dataNeedUpdate,
                 where: {

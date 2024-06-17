@@ -16,7 +16,7 @@ export class ServiceService {
     private readonly errorHanlder: ErrorHandlerService,
   ) { }
 
-  async create(jobId: number, { deliveryDate, price, serviceBenefit, serviceDesc, serviceLevel }: CreateServiceDto) {
+  async create(userId: number, jobId: number, { deliveryDate, price, serviceBenefit, serviceDesc, serviceLevel }: CreateServiceDto) {
 
     try {
 
@@ -25,6 +25,7 @@ export class ServiceService {
         where: {
           id: jobId,
           isDeleted: false,
+          user_id: userId,
         }
       });
 
