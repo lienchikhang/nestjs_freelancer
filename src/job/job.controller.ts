@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, Param, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { JobService } from './job.service';
-import { JobCreateDto, JobUpdateDto } from 'src/libs/dto';
+import { JobCreateDto, JobUpdateDto, JobsCreateDto } from 'src/libs/dto';
 import { Auth } from 'src/libs/decorators/common.decorator';
 import { User } from 'src/libs/decorators/user.decorator';
 import { RoleAuth } from 'src/libs/guards/role.guard';
@@ -44,10 +44,11 @@ export class JobController {
   @UseGuards(new RoleAuth([ROLE.SELLER]))
   @Auth()
   addOne(
-    @Body() data: JobCreateDto,
+    @Body() body: JobsCreateDto,
     @User() user,
   ) {
-    return this.jobService.addOne(user.userId, data);
+    console.log({ body })
+    return this.jobService.addOne(user.userId, body);
   }
 
   @Patch('delete/:id')

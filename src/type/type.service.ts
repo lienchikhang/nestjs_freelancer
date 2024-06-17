@@ -90,6 +90,7 @@ export class TypeService {
             const types = await this.prisma.types.findMany({
                 select: {
                     type_name: true,
+                    image: true,
                     id: true,
                 },
                 where: {

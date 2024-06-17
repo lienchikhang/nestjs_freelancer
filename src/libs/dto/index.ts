@@ -5,3 +5,4 @@ export * from './certi.dto';
 export * from './sub.dto';
 export * from './type.dto';
 export * from './job.dto';
+export * from './service.dto';

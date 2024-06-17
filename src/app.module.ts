@@ -8,7 +8,6 @@ import { TypeModule } from './type/type.module';
 import { ChildTypeModule } from './child-type/child-type.module';
 import { SubModule } from './sub/sub.module';
 import { JobModule } from './job/job.module';
-import { ServiceModule } from './service/service.module';
 import { CommentModule } from './comment/comment.module';
 import { RateModule } from './rate/rate.module';
 import { HireModule } from './hire/hire.module';
@@ -21,6 +20,7 @@ import { ErrorHandlerModule } from './error-handler/error-handler.module';
 import { ResponseModule } from './response/response.module';
 import { CompressModule } from './compress/compress.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { ServiceModule } from './service/service.module';
 
 @Module({
   imports: [

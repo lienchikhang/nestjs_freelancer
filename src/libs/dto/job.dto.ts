@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { CreateServiceDto } from "./service.dto";
 
 export class JobCreateDto {
     @IsNotEmpty()
@@ -12,6 +13,14 @@ export class JobCreateDto {
     @IsNotEmpty()
     @IsNumber()
     subId: number
+}
+
+export class JobsCreateDto {
+    @IsNotEmpty()
+    data: JobCreateDto
+
+    @IsNotEmpty()
+    services: CreateServiceDto[]
 }
 
 export class JobUpdateDto {

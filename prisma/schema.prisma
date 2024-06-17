@@ -91,12 +91,13 @@ model Services {
   id              Int      @id @default(autoincrement())
   price           Int
   service_desc    String?  @db.VarChar(255)
-  service_beneift String?  @db.VarChar(255)
-  delivery_date   DateTime @db.Timestamp(0)
-  job_id          Int?
+  service_benefit String?  @db.VarChar(255)
+  delivery_date   Int
+  job_id          Int
   service_level   String?  @default("BASIC") @db.VarChar(100)
+  isDeleted       Boolean? @default(false)
   Hires           Hires[]
-  Jobs            Jobs?    @relation(fields: [job_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Services_ibfk_1")
+  Jobs            Jobs     @relation(fields: [job_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Services_ibfk_1")
 
   @@index([job_id], map: "job_id")
 }

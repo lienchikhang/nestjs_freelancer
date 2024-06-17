@@ -2,7 +2,7 @@ import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CompressService } from 'src/compress/compress.service';
 import { ErrorHandlerService } from 'src/error-handler/error-handler.service';
-import { JobCreateDto, JobUpdateDto } from 'src/libs/dto';
+import { JobCreateDto, JobUpdateDto, JobsCreateDto } from 'src/libs/dto';
 import { IJobOrder, IJobsCondition, IJobsPageCondition } from 'src/libs/interfaces';
 import SlugService from 'src/libs/services/slug.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -164,20 +164,21 @@ export class JobService {
         }
     }
 
-    async addOne(userId: number, { jobName, jobDesc, subId }: JobCreateDto) {
+    async addOne(userId: number, { data, services }: JobsCreateDto) {
         try {
 
-            //check subId exist
             const isSubExist = await this.prisma.subs.findUnique({
                 where: {
-                    id: subId,
+                    id: data.subId,
                 }
             });
 
             if (!isSubExist) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'Sub not found', null));
 
-            //create new job
+            //check maximum service
+            if (services.length > 3) throw new BadRequestException(this.response.create(HttpStatus.BAD_REQUEST, 'Reach maximum service', null));
 
+            //create new job
             const allJobs = await this.prisma.jobs.findMany({
                 select: {
                     id: true,
@@ -195,8 +196,6 @@ export class JobService {
                 newJobId++;
             }
 
-            console.log({ newJobId });
-
             const newJob = await this.prisma.jobs.create({
                 select: {
                     createdAt: true,
@@ -206,11 +205,22 @@ export class JobService {
                 },
                 data: {
                     id: newJobId,
-                    job_name: this.slug.convert(jobName),
-                    job_desc: jobDesc,
-                    sub_id: subId,
+                    job_name: this.slug.convert(data.jobName),
+                    job_desc: data.jobDesc,
+                    sub_id: data.subId,
                     user_id: userId,
                     createdAt: new Date(),
+                    Services: {
+                        create: services.map((service) => {
+                            return {
+                                delivery_date: service.deliveryDate,
+                                price: service.price,
+                                service_benefit: service.serviceBenefit,
+                                service_desc: service.serviceDesc,
+                                service_level: service.serviceLevel.toUpperCase(),
+                            }
+                        })
+                    }
                 },
             });
 
@@ -339,42 +349,49 @@ export class JobService {
     }
 
     async uploadImage(file: Express.Multer.File, jobId: number, userId: number) {
-        if (!file) throw new BadRequestException(this.response.create(HttpStatus.BAD_REQUEST, 'No file upload', null));
+        try {
 
-        //check jobExist
-        const isExist = await this.prisma.jobs.findUnique({
-            where: {
-                id: jobId,
-                user_id: userId,
-                isDeleted: false,
-            }
-        });
+            if (!file) throw new BadRequestException(this.response.create(HttpStatus.BAD_REQUEST, 'No file upload', null));
 
-        if (!isExist) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'Job not found', null));
-
-        const originalImageData = file.buffer;
-
-        const compressedImageData = await this.compress.compress(originalImageData, 10);
-
-        const response = await this.cloudinary.upload(compressedImageData);
-
-        //update job
-        if (response) {
-            await this.prisma.jobs.update({
-                data: {
-                    job_image: response?.url,
-                },
+            //check jobExist
+            const isExist = await this.prisma.jobs.findUnique({
                 where: {
                     id: jobId,
-                    AND: [
-                        { user_id: userId },
-                        { isDeleted: false }
-                    ]
+                    user_id: userId,
+                    isDeleted: false,
                 }
-            })
+            });
+
+            if (!isExist) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'Job not found', null));
+
+            const originalImageData = file.buffer;
+
+            const compressedImageData = await this.compress.compress(originalImageData, 10);
+
+            const response = await this.cloudinary.upload(compressedImageData);
+
+            //update job
+            if (response) {
+                await this.prisma.jobs.update({
+                    data: {
+                        job_image: response?.url,
+                    },
+                    where: {
+                        id: jobId,
+                        AND: [
+                            { user_id: userId },
+                            { isDeleted: false }
+                        ]
+                    }
+                })
+            }
+
+            return this.response.create(HttpStatus.OK, 'Upload successfully!', response)
+
+        } catch (error) {
+            return this.errorHanlder.createError(error.status, error.response);
+        } finally {
+            await this.prisma.$disconnect();
         }
-
-        return this.response.create(HttpStatus.OK, 'Upload successfully!', response)
     }
-
 }
