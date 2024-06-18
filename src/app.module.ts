@@ -8,7 +8,6 @@ import { TypeModule } from './type/type.module';
 import { ChildTypeModule } from './child-type/child-type.module';
 import { SubModule } from './sub/sub.module';
 import { JobModule } from './job/job.module';
-import { CommentModule } from './comment/comment.module';
 import { RateModule } from './rate/rate.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -21,6 +20,7 @@ import { CompressModule } from './compress/compress.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ServiceModule } from './service/service.module';
 import { HireModule } from './hire/hire.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [

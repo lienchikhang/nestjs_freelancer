@@ -28,18 +28,17 @@ model ChildTypes {
   @@index([type_id], map: "type_id")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Comments {
   user_id   Int
   job_id    Int
   content   String   @db.Text
+  rate      Int
   createdAt DateTime @db.DateTime(0)
   Users     Users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Comments_ibfk_1")
   Jobs      Jobs     @relation(fields: [job_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Comments_ibfk_2")
 
+  @@id([user_id, job_id])
   @@index([job_id], map: "job_id")
-  @@index([user_id], map: "user_id")
-  @@ignore
 }
 
 model Hires {
@@ -69,10 +68,9 @@ model Jobs {
   createdAt DateTime   @db.DateTime(0)
   sub_id    Int
   user_id   Int
-  Comments  Comments[] @ignore
+  Comments  Comments[]
   Subs      Subs       @relation(fields: [sub_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Jobs_ibfk_1")
   Users     Users      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Jobs_ibfk_2")
-  Rates     Rates[]    @ignore
   Services  Services[]
 
   @@index([sub_id], map: "sub_id")
@@ -82,19 +80,6 @@ model Jobs {
 model PublicKeys {
   id         Int     @id @default(autoincrement())
   public_key String? @db.VarChar(255)
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model Rates {
-  user_id  Int
-  job_id   Int
-  rate_num Int
-  Users    Users @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Rates_ibfk_1")
-  Jobs     Jobs  @relation(fields: [job_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Rates_ibfk_2")
-
-  @@index([job_id], map: "job_id")
-  @@index([user_id], map: "user_id")
-  @@ignore
 }
 
 model Services {
@@ -156,9 +141,8 @@ model Users {
   token           String?          @db.VarChar(255)
   account_balance Int?             @default(0)
   Certifications  Certifications[]
-  Comments        Comments[]       @ignore
+  Comments        Comments[]
   Hires           Hires[]
   Jobs            Jobs[]
-  Rates           Rates[]          @ignore
   Skills          Skills[]
 }

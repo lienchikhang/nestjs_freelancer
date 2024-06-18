@@ -7,3 +7,4 @@ export * from './type.dto';
 export * from './job.dto';
 export * from './service.dto';
 export * from './hire.dto';
+export * from './comment.dto';
