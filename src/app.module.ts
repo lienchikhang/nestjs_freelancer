@@ -21,6 +21,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ServiceModule } from './service/service.module';
 import { HireModule } from './hire/hire.module';
 import { CommentModule } from './comment/comment.module';
+import { VnpayModule } from './vnpay/vnpay.module';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import { CommentModule } from './comment/comment.module';
     ErrorHandlerModule,
     ResponseModule,
     CompressModule,
-    CloudinaryModule
+    CloudinaryModule,
+    VnpayModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -17,6 +17,9 @@ export class HireService {
   async create(userId: number, { serviceId, method }: CreateHireDto) {
     try {
 
+      //check method
+      if (method.toLowerCase() != PAYMENT.VNPAY.toLowerCase()) throw new BadRequestException(this.response.create(HttpStatus.BAD_REQUEST, 'Payment method not acceptable', method));
+
       //check service exist
       const isExist = await this.prisma.services.findUnique({
         where: {
