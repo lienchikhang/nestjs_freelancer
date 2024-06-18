@@ -1,0 +1,604 @@
+{
+	"info": {
+		"_postman_id": "c5aa966c-dc05-4d61-a939-6b50462590ee",
+		"name": "FREELANCER",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "25217887"
+	},
+	"item": [
+		{
+			"name": "AUTH",
+			"item": [
+				{
+					"name": "REGISTER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"khang@gmail.com\",\n    \"password\": \"123456@Ll\",\n    \"fullName\": \"Link Peaceful\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}auth/register"
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"123456@Ll\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}auth/login"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "USER",
+			"item": [
+				{
+					"name": "GET INFO",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}user/getInfo"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"full_name\": \"Khang Chí Liên\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}user/update"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SKILL",
+			"item": [
+				{
+					"name": "GET ALL BY USER ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}skill/get-all"
+					},
+					"response": []
+				},
+				{
+					"name": "ADD",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"skillName\": \"NestJs#\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}skill/add-one"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{domain}}skill/delete/2"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CERTIFICATION",
+			"item": [
+				{
+					"name": "GET ALL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}certification/get-all"
+					},
+					"response": []
+				},
+				{
+					"name": "ADD",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"certiName\": \"Balancher HV\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}certification/add-one"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{domain}}certification/delete/2"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TYPE",
+			"item": [
+				{
+					"name": "GET ALL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}type/get-all"
+					},
+					"response": []
+				},
+				{
+					"name": "ADD ",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"typeName\": \"Consulting\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}type/add"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{domain}}type/delete/1"
+					},
+					"response": []
+				},
+				{
+					"name": "GET ONLY",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}type/get-only"
+					},
+					"response": []
+				},
+				{
+					"name": "UPLOAD IMAGE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/lienchikhang777/Downloads/code.png"
+								}
+							]
+						},
+						"url": "{{domain}}type/upload/2"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CHILD TYPE",
+			"item": [
+				{
+					"name": "GET ALL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}child-type/get-all/4"
+					},
+					"response": []
+				},
+				{
+					"name": "ADD",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"childTypeName\": \"Data Consulting\",\n    \"typeId\": 9\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}child-type/add"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SUB",
+			"item": [
+				{
+					"name": "GET ALL BY CHILD TYPE ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}sub/get-all/9"
+					},
+					"response": []
+				},
+				{
+					"name": "ADD",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"subName\": \"Data Visualization Consulting\",\n    \"childTypeId\": 36\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}sub/add"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "JOB",
+			"item": [
+				{
+					"name": "GET ALL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}job/get-all?orderBy=rate&sort=desc&category=1",
+							"host": [
+								"{{domain}}job"
+							],
+							"path": [
+								"get-all"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "lsr",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "3d",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "rate"
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "desc"
+								},
+								{
+									"key": "category",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ADD JOB WITH SERVICES",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"jobName\": \"I will record a pro romanian female voice over\",\n        \"jobDesc\": \"I'm AVOA aka Alexandra Voice Over Artist-full time VO with over 10 years of acting experience\",\n        \"subId\": 91\n    },\n    \"services\": [\n        {\n            \"price\": 120000,\n            \"serviceDesc\": \"HQ audio file (WAV format)\",\n            \"serviceBenefit\": \"HQ audio file (WAV format)\",\n            \"deliveryDate\": 1,\n            \"serviceLevel\": \"BASic\"\n        }\n        // {\n        //     \"price\": 670000,\n        //     \"serviceDesc\": \"1 Pro Concept ( Logo cost extra) - 1 Pro Concepts + - Print Ready PDF files. 1 person details. Logo cost extra\",\n        //     \"serviceBenefit\": \"3 concepts included, Logo transparency, Vector file, Printable file, Include 3D mockup\",\n        //     \"deliveryDate\": 3,\n        //     \"serviceLevel\": \"ADVANCED\"\n        // }\n        // {\n        //     \"price\": 1400000,\n        //     \"serviceDesc\": \"Guard Dog Package- For Exclusives! 5 Highly Professional variations JPEG PNG + STATIONARY & SOCIAL MEDIA DESIGN + Source files for logo\",\n        //     \"serviceBenefit\": \"3 concepts included, Logo transparency, Vector file, Printable file, Include 3D mockup\",\n        //     \"deliveryDate\": 3,\n        //     \"serviceLevel\": \"PREMIUM\"\n        // }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}job/add"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{domain}}job/delete/18"
+					},
+					"response": []
+				},
+				{
+					"name": "GET DETAIL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}job/get/1"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"subId\": 12\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}job/update/17"
+					},
+					"response": []
+				},
+				{
+					"name": "UPLOAD ",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/lienchikhang777/Desktop/Ảnh màn hình 2024-06-18 lúc 13.54.55.png"
+								}
+							]
+						},
+						"url": "{{domain}}job/upload/6"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SERVICE",
+			"item": [
+				{
+					"name": "ADD SINGLE SERVICE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"price\": 2900000,\n    \"serviceDesc\": \"500 words well researched SEO Articles and Blog posts\",\n    \"serviceBenefit\": \"1 Article, Plagiarism check, Publish articles, References & citations, Include keyword research\",\n    \"deliveryDate\": 5,\n    \"serviceLevel\": \"SUPER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}service/add/5"
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY JOB ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}service/get-by-job-id/2"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE ",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"price\": 900000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}service/update/24"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{domain}}service/delete/15"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "HIRE",
+			"item": [
+				{
+					"name": "PAY WITH VNPAY",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"serviceId\": 8,\n    \"method\": \"VNPay\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}hire/pay-with-vnpay"
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL JOBS WHICH USER HIRED",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}hire/get-all"
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL JOBS CREATED BY SELLER",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}hire/get-all-by-seller"
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL SERVICES HIRED BY USER (ONLY SELLER CAN USE - param is serviceId)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}hire/get-detail-service-by-seller/11"
+					},
+					"response": []
+				},
+				{
+					"name": "FINISH SERVICE BY SELLER (Param is hireId)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{domain}}hire/finish-service-by-seller/9"
+					},
+					"response": []
+				},
+				{
+					"name": "CONFIRM FINISH HIRED JOB BY USER",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{domain}}hire/confirm-finish-service-by-user/9"
+					},
+					"response": []
+				},
+				{
+					"name": "PAY WITH ACCOUNT BALANCE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"serviceId\": 11,\n    \"method\": \"balance\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}hire/pay-with-balance"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "COMMENT",
+			"item": [
+				{
+					"name": "GET BY JOB ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{domain}}comment/get/1"
+					},
+					"response": []
+				},
+				{
+					"name": "ADD BY JOB ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\": \"I highly recommend hiring Explorance for your logo needs. She was incredible to work with! I started with sending her a rather chaotic description of what I had in mind, and by the end, she exceeded my expectations.\",\n    \"rateNum\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{domain}}comment/add/1"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
