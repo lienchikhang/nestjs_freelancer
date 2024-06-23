@@ -20,6 +20,8 @@ export class JobController {
     @Query('category') category: string,
     @Query('orderBy') orderBy: string,
     @Query('sort') sort: string,
+    @Query('deliveryTime') deliveryTime: number,
+    @Query('price') price: number,
   ) {
     return this.jobService.getAll(
       page && Number(page),
@@ -28,6 +30,8 @@ export class JobController {
       category && Number(category),
       orderBy,
       sort,
+      deliveryTime && +deliveryTime,
+      price && +price,
     );
   }
 

@@ -26,10 +26,12 @@ export class JobService {
         sub: number,
         orderBy: string = '',
         sort: string = 'asc',
+        deliveryTime: number,
+        price: number = 1e9,
     ) {
         try {
 
-            console.log({ page, pageSize, name, sub, orderBy, sort })
+            console.log({ page, pageSize, name, sub, orderBy, sort, deliveryTime, price })
 
             var defaultCondition = {
                 isDeleted: false,
@@ -58,22 +60,74 @@ export class JobService {
             if (sub) {
                 defaultCondition = {
                     ...defaultCondition,
-                    AND: [
-                        {
-                            sub_id: sub,
-                        }
-                    ]
+                    // AND: [
+                    //     {
+                    //         sub_id: sub,
+                    //     }
+                    // ]
+                    sub_id: sub,
                 };
 
                 defaultConditionCountPage = {
                     ...defaultConditionCountPage,
-                    AND: [
-                        {
-                            sub_id: sub,
-                        }
-                    ]
+                    // AND: [
+                    //     {
+                    //         sub_id: sub,
+                    //     }
+                    // ]
+                    sub_id: sub,
                 }
             }
+
+            if (deliveryTime) {
+                defaultCondition = {
+                    ...defaultCondition,
+                    Services: {
+                        some: {
+                            delivery_date: deliveryTime,
+                            price: defaultCondition.Services?.some.price!
+                        }
+                    }
+                };
+
+                defaultConditionCountPage = {
+                    ...defaultConditionCountPage,
+                    Services: {
+                        some: {
+                            delivery_date: deliveryTime,
+                            price: defaultCondition.Services?.some.price!
+                        }
+                    }
+                }
+            }
+
+            if (price) {
+                defaultCondition = {
+                    ...defaultCondition,
+                    Services: {
+                        some: {
+                            delivery_date: defaultCondition.Services?.some.delivery_date!,
+                            price: {
+                                lte: price,
+                            },
+                        }
+                    }
+                };
+
+                defaultConditionCountPage = {
+                    ...defaultConditionCountPage,
+                    Services: {
+                        some: {
+                            delivery_date: defaultCondition.Services?.some.delivery_date!,
+                            price: {
+                                lte: price,
+                            },
+                        }
+                    }
+                }
+            }
+
+            console.log('final filter', defaultCondition);
 
             const jobs = await this.prisma.jobs.findMany({
                 select: {
@@ -148,6 +202,11 @@ export class JobService {
                         select: {
                             avatar: true,
                             full_name: true,
+                            Skills: {
+                                select: {
+                                    skill_name: true,
+                                }
+                            }
                         }
                     },
                 },

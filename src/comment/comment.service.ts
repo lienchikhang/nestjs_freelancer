@@ -124,6 +124,9 @@ export class CommentService {
           },
           createdAt: true,
         },
+        where: {
+          job_id: jobId,
+        },
         take: pageSize,
         skip: (page - 1) * pageSize,
       });
