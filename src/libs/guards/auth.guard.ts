@@ -27,7 +27,10 @@ class AuthGuard implements CanActivate {
 
             const token = request.cookies['token'];
 
-            if (!token) throw new UnauthorizedException(this.response.create(HttpStatus.UNAUTHORIZED, 'Please login to do this action', null));;
+            if (!token) throw new UnauthorizedException(this.response.create(HttpStatus.UNAUTHORIZED, 'Please login to do this action', null));
+
+            //verify
+            this.tokenService.verify(token);
 
             const { userId, role, exp } = this.tokenService.decode(token) as IAuthPayload;
 
@@ -45,9 +48,6 @@ class AuthGuard implements CanActivate {
 
             // if not login yet => 401
             if (!isLoggedIn) throw new UnauthorizedException(this.response.create(HttpStatus.UNAUTHORIZED, 'Dont have permission', null));
-
-            //verify
-            this.tokenService.verify(token);
 
             request.tokenExp = exp;
             request.user = { userId, role, };

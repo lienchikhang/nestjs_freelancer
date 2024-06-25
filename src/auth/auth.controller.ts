@@ -1,10 +1,11 @@
-import { Body, Controller, HttpCode, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UserCreateDto, UserLoginDto } from 'src/libs/dto/user.dto';
+import { ICheckValid, UserCreateDto, UserLoginDto } from 'src/libs/dto/user.dto';
 import AuthGuard from 'src/libs/guards/auth.guard';
 import AuthInterceptor from 'src/libs/interceptors/auth.interceptor';
 import { User } from 'src/libs/decorators/user.decorator';
 import RenewalInterceptor from 'src/libs/interceptors/renewal.interceptor';
+import { TokenGuard } from 'src/libs/guards/validToken.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -24,6 +25,7 @@ export class AuthController {
   login(
     @Body() data: UserLoginDto
   ) {
+    console.log({ data })
     return this.authService.login(data);
   }
 
@@ -35,5 +37,12 @@ export class AuthController {
   ) {
     console.log('req', user);
     return 'okau';
+  }
+
+  @Get('check')
+  @UseGuards(TokenGuard)
+  check(
+  ) {
+    return this.authService.check();
   }
 }

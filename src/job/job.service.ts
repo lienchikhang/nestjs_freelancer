@@ -31,7 +31,7 @@ export class JobService {
     ) {
         try {
 
-            console.log({ page, pageSize, name, sub, orderBy, sort, deliveryTime, price })
+            // console.log({ page, pageSize, name, sub, orderBy, sort, deliveryTime, price })
 
             var defaultCondition = {
                 isDeleted: false,
@@ -127,7 +127,7 @@ export class JobService {
                 }
             }
 
-            console.log('final filter', defaultCondition);
+            // console.log('final filter', defaultCondition);
 
             const jobs = await this.prisma.jobs.findMany({
                 select: {
@@ -165,7 +165,6 @@ export class JobService {
                 }
             });
 
-            console.log({ jobs })
 
             const totalJobs = await this.prisma.jobs.count({
                 where: defaultConditionCountPage,

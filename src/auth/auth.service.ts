@@ -1,8 +1,8 @@
-import { BadRequestException, ConflictException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { generateKeyPairSync } from 'crypto';
 import { ErrorHandlerService } from 'src/error-handler/error-handler.service';
-import { UserCreateDto, UserLoginDto } from 'src/libs/dto/user.dto';
+import { ICheckValid, UserCreateDto, UserLoginDto } from 'src/libs/dto/user.dto';
 import BcryptService from 'src/libs/services/bcrypt.service';
 import SlugService from 'src/libs/services/slug.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -99,7 +99,14 @@ export class AuthService {
                 }
             });
 
-            return this.response.create(HttpStatus.OK, 'Login successfully!', token);
+            return this.response.create(HttpStatus.OK, 'Login successfully!', {
+                token: token,
+                user: {
+                    full_name: isExist.full_name,
+                    avatar: isExist.avatar,
+                    email: isExist.email,
+                }
+            });
 
         } catch (error) {
 
@@ -125,5 +132,9 @@ export class AuthService {
         } finally {
             await this.prisma.$disconnect();
         }
+    }
+
+    async check() {
+        return this.response.create(HttpStatus.OK, 'Verify successfully!', true);
     }
 }

@@ -6,6 +6,7 @@ import { User } from 'src/libs/decorators/user.decorator';
 import { RoleAuth } from 'src/libs/guards/role.guard';
 import { ROLE } from 'src/libs/enum';
 import { FileInterceptor } from '@nestjs/platform-express';
+import RenewalInterceptor from 'src/libs/interceptors/renewal.interceptor';
 
 @Controller('job')
 export class JobController {
@@ -13,6 +14,7 @@ export class JobController {
 
   @Get('get-all')
   @HttpCode(200)
+  @UseInterceptors(RenewalInterceptor)
   getAll(
     @Query('page') page: string,
     @Query('pageSize') pageSize: string,
@@ -37,6 +39,7 @@ export class JobController {
 
   @Get('get/:id')
   @HttpCode(200)
+  @UseInterceptors(RenewalInterceptor)
   getDetail(
     @Param('id') id: string
   ) {

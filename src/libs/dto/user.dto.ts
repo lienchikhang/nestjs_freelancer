@@ -36,3 +36,9 @@ export class UserLoginDto {
     @IsString()
     password: string
 }
+
+export class ICheckValid {
+    @IsNotEmpty()
+    @IsString()
+    token: string
+}
