@@ -6,6 +6,9 @@ import AuthInterceptor from 'src/libs/interceptors/auth.interceptor';
 import { User } from 'src/libs/decorators/user.decorator';
 import RenewalInterceptor from 'src/libs/interceptors/renewal.interceptor';
 import { TokenGuard } from 'src/libs/guards/validToken.guard';
+import { Auth } from 'src/libs/decorators/common.decorator';
+import { LogoutGuard } from 'src/libs/guards/logout.guard';
+import { LogoutInterceptor } from 'src/libs/interceptors/logout.interceptor';
 
 @Controller('auth')
 export class AuthController {
@@ -29,6 +32,16 @@ export class AuthController {
     return this.authService.login(data);
   }
 
+  @Post('logout')
+  @HttpCode(200)
+  @UseGuards(LogoutGuard)
+  @UseInterceptors(LogoutInterceptor)
+  logout(
+    @User() user,
+  ) {
+    return this.authService.logout(user.userId);
+  }
+
   @Post('test')
   @UseGuards(AuthGuard)
   @UseInterceptors(RenewalInterceptor)
@@ -39,10 +52,11 @@ export class AuthController {
     return 'okau';
   }
 
-  @Get('check')
-  @UseGuards(TokenGuard)
+  @Post('check')
   check(
+    @Body() body: ICheckValid
   ) {
-    return this.authService.check();
+    console.log('body in cehckd', body);
+    return this.authService.check(body);
   }
 }

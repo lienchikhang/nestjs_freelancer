@@ -38,7 +38,12 @@ export class UserLoginDto {
 }
 
 export class ICheckValid {
+
     @IsNotEmpty()
     @IsString()
-    token: string
+    name: string
+
+    @IsNotEmpty()
+    @IsString()
+    value: string
 }

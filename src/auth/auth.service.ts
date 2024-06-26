@@ -119,14 +119,16 @@ export class AuthService {
 
     async logout(userId: number) {
         try {
-            await this.prisma.users.update({
+            const rs = await this.prisma.users.update({
                 data: {
                     token: null,
                 },
                 where: {
                     id: userId,
                 }
-            })
+            });
+
+            return this.response.create(HttpStatus.OK, 'Logout successfully!', null);
         } catch (error) {
             return this.errorHandler.createError(error.status, error.response);
         } finally {
@@ -134,7 +136,30 @@ export class AuthService {
         }
     }
 
-    async check() {
-        return this.response.create(HttpStatus.OK, 'Verify successfully!', true);
+    async check({ value }: ICheckValid) {
+
+        try {
+            this.token.verify(value);
+
+            const payload = this.token.decode(value) as {
+                userId: number,
+            };
+
+            const isLoggedIn = await this.prisma.users.findFirst({
+                where: {
+                    id: payload.userId,
+                    token: value,
+                }
+            });
+
+            if (!isLoggedIn) return false;
+
+            return this.response.create(HttpStatus.OK, 'Verify successfully!', true);
+
+        } catch (error) {
+            console.log('error in tokenauth', error);
+            return this.response.create(HttpStatus.UNAUTHORIZED, 'Verify failed!', false);
+        }
+
     }
 }
