@@ -1,10 +1,10 @@
 import { UseGuards, UseInterceptors, applyDecorators } from '@nestjs/common';
-import AuthGuard from '../guards/auth.guard';
 import RenewalInterceptor from '../interceptors/renewal.interceptor';
+import MyAuthGuard from '../guards/auth.guard';
 
 export function Auth() {
     return applyDecorators(
-        UseGuards(AuthGuard),
+        UseGuards(MyAuthGuard),
         UseInterceptors(RenewalInterceptor)
     );
 }

@@ -6,9 +6,12 @@ class AuthInterceptor implements NestInterceptor {
 
         const res = context.switchToHttp().getResponse();
 
-        return next.handle().pipe(tap((data) => res.cookie('token', data.content.token, {
-            httpOnly: true,
-        })));
+
+        return next.handle().pipe(tap((data) => {
+            return res.cookie('token', data.content.token, {
+                httpOnly: true,
+            })
+        }));
     }
 }
 

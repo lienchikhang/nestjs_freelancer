@@ -7,6 +7,7 @@ import { RoleAuth } from 'src/libs/guards/role.guard';
 import { ROLE } from 'src/libs/enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import RenewalInterceptor from 'src/libs/interceptors/renewal.interceptor';
+import { CombileGuard } from 'src/libs/guards/combileAuth.guard';
 
 @Controller('job')
 export class JobController {
@@ -49,7 +50,9 @@ export class JobController {
   @Post('add')
   @HttpCode(201)
   @UseGuards(new RoleAuth([ROLE.SELLER]))
-  @Auth()
+  // @Auth()
+  @UseGuards(CombileGuard)
+  @UseInterceptors(RenewalInterceptor)
   addOne(
     @Body() body: JobsCreateDto,
     @User() user,

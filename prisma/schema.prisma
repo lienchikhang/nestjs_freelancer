@@ -138,7 +138,7 @@ model Users {
   avatar          String?          @db.VarChar(255)
   facebook_app_id String?          @db.VarChar(255)
   google_app_id   String?          @db.VarChar(255)
-  token           String?          @db.VarChar(255)
+  token           String?          @db.Text
   account_balance Int?             @default(0)
   Certifications  Certifications[]
   Comments        Comments[]

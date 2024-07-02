@@ -10,7 +10,7 @@ import { ResponseService } from "src/response/response.service";
 import { ErrorHandlerService } from "src/error-handler/error-handler.service";
 
 @Injectable()
-class AuthGuard implements CanActivate {
+class MyAuthGuard implements CanActivate {
 
     constructor(
         private readonly config: ConfigService,
@@ -66,4 +66,4 @@ class AuthGuard implements CanActivate {
     }
 }
 
-export default AuthGuard;
+export default MyAuthGuard;

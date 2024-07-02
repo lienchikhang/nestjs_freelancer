@@ -109,4 +109,35 @@ export class UserService {
         }
 
     }
+
+    async active(userId: number) {
+        try {
+            //check exist
+            const isExist = await this.prisma.users.findUnique({
+                where: {
+                    id: userId,
+                }
+            });
+
+            if (!isExist) throw new NotFoundException(this.respose.create(HttpStatus.NOT_FOUND, 'User not found', null));
+
+            //update role
+            const rs = await this.prisma.users.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    role: 'seller'
+                }
+            });
+
+            return this.respose.create(HttpStatus.OK, 'Update successfully!', true);
+
+
+        } catch (error) {
+            return this.errorHandler.createError(error.status, error.response);
+        } finally {
+            await this.prisma.$disconnect();
+        }
+    }
 }

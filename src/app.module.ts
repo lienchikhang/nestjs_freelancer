@@ -22,12 +22,12 @@ import { ServiceModule } from './service/service.module';
 import { HireModule } from './hire/hire.module';
 import { CommentModule } from './comment/comment.module';
 import { VnpayModule } from './vnpay/vnpay.module';
+import { FacebookStrategy } from './libs/strategies/Facebook.strategy';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-
     }),
     SkillModule,
     CertificationModule,
@@ -50,9 +50,9 @@ import { VnpayModule } from './vnpay/vnpay.module';
     ResponseModule,
     CompressModule,
     CloudinaryModule,
-    VnpayModule
+    VnpayModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, FacebookStrategy],
 })
 export class AppModule { }

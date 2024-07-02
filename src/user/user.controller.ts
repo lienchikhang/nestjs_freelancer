@@ -29,4 +29,14 @@ export class UserController {
   ) {
     return this.userService.updateInfo(user.userId, data);
   }
+
+  @Patch('active')
+  @HttpCode(200)
+  @UseGuards(AuthGuard)
+  @UseInterceptors(RenewalInterceptor)
+  activeSeller(
+    @User() user,
+  ) {
+    return this.userService.active(user.userId);
+  }
 }

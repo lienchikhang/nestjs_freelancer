@@ -154,11 +154,11 @@ export class AuthService {
 
             if (!isLoggedIn) return false;
 
-            return this.response.create(HttpStatus.OK, 'Verify successfully!', true);
+            return true;
 
         } catch (error) {
             console.log('error in tokenauth', error);
-            return this.response.create(HttpStatus.UNAUTHORIZED, 'Verify failed!', false);
+            return false;
         }
 
     }
