@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, Patch, Post, UseGuards, UseInterceptor
 import { UserService } from './user.service';
 import { User } from 'src/libs/decorators/user.decorator';
 import AuthGuard from 'src/libs/guards/auth.guard';
-import { UserUpdateDto } from 'src/libs/dto';
+import { ICheckEmailUser, UserUpdateDto } from 'src/libs/dto';
 import RenewalInterceptor from 'src/libs/interceptors/renewal.interceptor';
 
 @Controller('user')
@@ -38,5 +38,13 @@ export class UserController {
     @User() user,
   ) {
     return this.userService.active(user.userId);
+  }
+
+  @Post('check-email')
+  @HttpCode(200)
+  checkEmail(
+    @Body() body: ICheckEmailUser
+  ) {
+    return this.userService.checkEmail(body);
   }
 }

@@ -8,9 +8,10 @@ export class FacebookInterceptor implements NestInterceptor {
 
         return next.handle().pipe(tap((data) => {
             console.log('before return facebook', req.user);
-            return res.cookie('token', req.user.content.accessToken, {
+            res.cookie('token', req.user.content.accessToken, {
                 httpOnly: true,
             })
+            return null;
         }));
     }
 

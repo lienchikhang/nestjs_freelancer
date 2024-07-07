@@ -70,16 +70,11 @@ export class AuthController {
 
   @Get("facebook/redirect")
   @UseGuards(AuthGuard("facebook"))
-  @UseInterceptors(FacebookInterceptor)
+  // @UseInterceptors(FacebookInterceptor)
   async facebookLoginRedirect(
     @Req() req: Request,
     @Res() res,
   ): Promise<any> {
-    //
-    res.json({
-      status: HttpStatus.OK,
-      mess: 'Login successfully',
-      content: req.user
-    }).redirect('http://localhost:3000');
+    res.redirect(`http://localhost:3000/login?user=${encodeURIComponent(JSON.stringify(req.user))}`);
   }
 }

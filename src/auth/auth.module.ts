@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserService } from 'src/user/user.service';
@@ -7,6 +7,7 @@ import BcryptService from 'src/libs/services/bcrypt.service';
 import { TokenService } from 'src/token/token.service';
 import { FacebookStrategy } from 'src/libs/strategies/Facebook.strategy';
 import { PassportModule } from '@nestjs/passport';
+import { FacebookMiddleware } from 'src/libs/middlewares/facebook.middleware';
 
 @Module({
   imports: [PassportModule.register({ defaultStrategy: 'facebook' })],
@@ -20,4 +21,9 @@ import { PassportModule } from '@nestjs/passport';
     FacebookStrategy,
   ],
 })
-export class AuthModule { }
+export class AuthModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(FacebookMiddleware)
+  }
+}

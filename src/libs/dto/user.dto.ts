@@ -47,3 +47,9 @@ export class ICheckValid {
     @IsString()
     value: string
 }
+
+export class ICheckEmailUser {
+    @IsNotEmpty()
+    @IsEmail()
+    email: string
+}

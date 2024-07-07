@@ -1,6 +1,6 @@
 import { ConflictException, HttpCode, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { ErrorHandlerService } from 'src/error-handler/error-handler.service';
-import { UserCreateDto, UserUpdateDto } from 'src/libs/dto/user.dto';
+import { ICheckEmailUser, UserCreateDto, UserUpdateDto } from 'src/libs/dto/user.dto';
 import BcryptService from 'src/libs/services/bcrypt.service';
 
 import SlugService from 'src/libs/services/slug.service';
@@ -134,6 +134,24 @@ export class UserService {
             return this.respose.create(HttpStatus.OK, 'Update successfully!', true);
 
 
+        } catch (error) {
+            return this.errorHandler.createError(error.status, error.response);
+        } finally {
+            await this.prisma.$disconnect();
+        }
+    }
+
+    async checkEmail({ email }: ICheckEmailUser) {
+        try {
+            const rs = await this.prisma.users.findFirst({
+                where: {
+                    email,
+                }
+            });
+
+            if (rs) return this.respose.create(HttpStatus.BAD_REQUEST, `${email} has already existed!`, email);
+
+            return this.respose.create(HttpStatus.OK, 'Able to create', email);
         } catch (error) {
             return this.errorHandler.createError(error.status, error.response);
         } finally {
