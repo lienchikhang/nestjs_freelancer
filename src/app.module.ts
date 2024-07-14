@@ -23,6 +23,10 @@ import { HireModule } from './hire/hire.module';
 import { CommentModule } from './comment/comment.module';
 import { VnpayModule } from './vnpay/vnpay.module';
 import { FacebookStrategy } from './libs/strategies/Facebook.strategy';
+import { MailModule } from './mail/mail.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import { RedisClientOptions } from 'redis';
+import { redisStore } from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -51,6 +55,15 @@ import { FacebookStrategy } from './libs/strategies/Facebook.strategy';
     CompressModule,
     CloudinaryModule,
     VnpayModule,
+    MailModule,
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore,
+      // Store-specific configuration:
+      host: 'localhost',
+      port: 6379,
+      isGlobal: true,
+      ttl: 15 * 1000 * 60,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, FacebookStrategy],
