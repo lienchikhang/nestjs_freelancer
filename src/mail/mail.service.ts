@@ -45,11 +45,12 @@ export class MailService {
       </div>` // Văn bản email định dạng HTML
     };
 
-    //save OTP to redis
+    //check OTP exists
     const isExistOTP = await this.cacheManager.get(to);
     if (isExistOTP) {
       await this.cacheManager.del(to);
     }
+    //save OTP to redis
     await this.cacheManager.set(to, OTP);
 
     //send OTP
@@ -65,7 +66,7 @@ export class MailService {
     return this.response.create(HttpStatus.OK, 'Send mail successfully!', null);
   }
 
-  findAll() {
+  verifyOTP() {
     return `This action returns all mail`;
   }
 

@@ -1,5 +1,7 @@
-import { BadRequestException, ConflictException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { BadRequestException, ConflictException, HttpStatus, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Cache } from 'cache-manager';
 import { generateKeyPairSync } from 'crypto';
 import { ErrorHandlerService } from 'src/error-handler/error-handler.service';
 import { ICheckValid, UserCreateDto, UserLoginDto } from 'src/libs/dto/user.dto';
@@ -19,27 +21,32 @@ export class AuthService {
         private readonly errorHandler: ErrorHandlerService,
         private readonly token: TokenService,
         private readonly config: ConfigService,
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
     ) { }
 
-    async register(data: UserCreateDto) {
+    async register({ email, fullName, password, otp }: UserCreateDto) {
         try {
 
             //check email exist
             const isExist = await this.prisma.users.findFirst({
                 where: {
-                    email: data.email,
+                    email,
                 }
             });
 
-            console.log({ isExist })
+            if (isExist) throw new ConflictException(this.response.create(HttpStatus.CONFLICT, 'Email has already existed', email));
 
-            if (isExist) throw new ConflictException(this.response.create(HttpStatus.CONFLICT, 'Email has already existed', data.email));
+            //verify OTP
+            const verifyOtp = await this.cacheManager.get(email.trim());
+            console.log('verifyOTP', verifyOtp);
+            if (!verifyOtp) throw new BadRequestException(this.response.create(HttpStatus.BAD_REQUEST, 'OTP has expired!', otp))
+            if (verifyOtp != otp) throw new BadRequestException(this.response.create(HttpStatus.BAD_REQUEST, 'OTP is not correct!', otp));
 
             //hash password
-            const hashPass = this.bcrypt.encode(data.password);
+            const hashPass = this.bcrypt.encode(password);
 
             //convert name to slug
-            const slugName = this.slug.convert(data.fullName);
+            const slugName = this.slug.convert(fullName);
 
             //create new user
             const newUser = await this.prisma.users.create({
@@ -49,7 +56,7 @@ export class AuthService {
                     avatar: true,
                 },
                 data: {
-                    email: data.email,
+                    email: email,
                     password: hashPass,
                     full_name: slugName,
                     joinAt: new Date(),

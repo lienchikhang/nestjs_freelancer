@@ -33,7 +33,7 @@ class Otp {
 
         for (let i = 0; i < 6; i++) {
             if (i % 2 == 0) {
-                finalOtp += alphabet[Math.floor(Math.random() * 26)];
+                finalOtp += alphabet[Math.floor(Math.random() * 25)];
             } else {
                 finalOtp += Math.floor(Math.random() * 9);
             }

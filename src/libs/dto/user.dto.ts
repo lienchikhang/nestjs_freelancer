@@ -12,6 +12,10 @@ export class UserCreateDto {
     @IsNotEmpty()
     @IsStrongPassword()
     password: string
+
+    @IsNotEmpty()
+    @IsString()
+    otp: string
 }
 
 export class UserUpdateDto {

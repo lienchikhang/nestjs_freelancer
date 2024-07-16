@@ -13,8 +13,8 @@ export class MailController {
   }
 
   @Get()
-  findAll() {
-    return this.mailService.findAll();
+  verifyOTP() {
+    return this.mailService.verifyOTP();
   }
 
   @Get(':id')
