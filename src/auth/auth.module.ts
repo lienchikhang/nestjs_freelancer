@@ -8,6 +8,7 @@ import { TokenService } from 'src/token/token.service';
 import { FacebookStrategy } from 'src/libs/strategies/Facebook.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { FacebookMiddleware } from 'src/libs/middlewares/facebook.middleware';
+import { GoogleStategy } from 'src/libs/strategies/Google.strategy';
 
 @Module({
   imports: [PassportModule.register({ defaultStrategy: 'facebook' })],
@@ -19,6 +20,7 @@ import { FacebookMiddleware } from 'src/libs/middlewares/facebook.middleware';
     BcryptService,
     TokenService,
     FacebookStrategy,
+    GoogleStategy,
   ],
 })
 export class AuthModule implements NestModule {

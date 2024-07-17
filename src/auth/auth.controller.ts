@@ -77,4 +77,19 @@ export class AuthController {
   ): Promise<any> {
     res.redirect(`http://localhost:3000/login?user=${encodeURIComponent(JSON.stringify(req.user))}`);
   }
+
+  @Get("google/login")
+  @UseGuards(AuthGuard("google"))
+  async googleLogin(): Promise<any> {
+    return HttpStatus.OK;
+  }
+
+  @Get("google/redirect")
+  @UseGuards(AuthGuard("google"))
+  async googleLoginRedirect(
+    @Req() req: Request,
+    @Res() res,
+  ): Promise<any> {
+    res.redirect(`http://localhost:3000/login?user=${encodeURIComponent(JSON.stringify(req.user))}`);
+  }
 }
