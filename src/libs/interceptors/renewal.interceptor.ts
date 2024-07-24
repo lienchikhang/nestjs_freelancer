@@ -22,7 +22,7 @@ class RenewalInterceptor implements NestInterceptor {
         //check expired soon
         const currentTime = Date.now();
         const expiredTime = exp * 1000;
-        const isExpiringSoon = expiredTime - currentTime <= 1 * 60 * 1000;
+        const isExpiringSoon = expiredTime - currentTime <= 8 * 60 * 1000;
 
         if (isExpiringSoon) {
             const newToken = this.tokenService.sign(req.user);

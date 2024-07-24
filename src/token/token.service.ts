@@ -25,7 +25,7 @@ export class TokenService {
 
     public sign(payload: any): string {
         return sign(payload, process.env.PUBLIC_KEY, {
-            expiresIn: '2m',
+            expiresIn: '15m',
         });
     }
 

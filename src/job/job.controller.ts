@@ -50,8 +50,8 @@ export class JobController {
   @Post('add')
   @HttpCode(201)
   @UseGuards(new RoleAuth([ROLE.SELLER]))
-  // @Auth()
-  @UseGuards(CombileGuard)
+  @Auth()
+  // @UseGuards(CombileGuard)
   @UseInterceptors(RenewalInterceptor)
   addOne(
     @Body() body: JobsCreateDto,
@@ -94,6 +94,7 @@ export class JobController {
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
+    console.log('file in ser', file);
     return this.jobService.uploadImage(file, Number(id), user.userId);
   }
 }

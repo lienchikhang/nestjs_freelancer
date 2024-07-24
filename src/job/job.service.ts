@@ -230,7 +230,7 @@ export class JobService {
 
             const isSubExist = await this.prisma.subs.findUnique({
                 where: {
-                    id: data.subId,
+                    id: +data.subId,
                 }
             });
 
@@ -260,22 +260,23 @@ export class JobService {
             const newJob = await this.prisma.jobs.create({
                 select: {
                     createdAt: true,
-                    job_image: true,
-                    job_name: true,
-                    job_desc: true,
+                    // job_image: true,
+                    // job_name: true,
+                    // job_desc: true,
+                    id: true,
                 },
                 data: {
                     id: newJobId,
                     job_name: this.slug.convert(data.jobName),
                     job_desc: data.jobDesc,
-                    sub_id: data.subId,
+                    sub_id: +data.subId,
                     user_id: userId,
                     createdAt: new Date(),
                     Services: {
                         create: services.map((service) => {
                             return {
-                                delivery_date: service.deliveryDate,
-                                price: service.price,
+                                delivery_date: +service.deliveryDate,
+                                price: +service.price,
                                 service_benefit: service.serviceBenefit,
                                 service_desc: service.serviceDesc,
                                 service_level: service.serviceLevel.toUpperCase(),
