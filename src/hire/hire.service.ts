@@ -232,27 +232,33 @@ export class HireService {
           id: true,
           job_image: true,
           job_name: true,
+          job_desc: true,
+          sub_id: true,
+          Subs: {
+            select: {
+              ChildTypes: {
+                select: {
+                  type_id: true,
+                  id: true,
+                },
+              },
+              // child_type_id: true,
+            }
+          },
           Services: {
             select: {
               price: true,
               service_level: true,
               id: true,
-              // Hires: {
-              //   select: {
-              //     isDone: true,
-              //     Users: {
-              //       select: {
-              //         avatar: true,
-              //         full_name: true,
-              //       }
-              //     }
-              //   },
-              // }
+              delivery_date: true,
+              service_benefit: true,
+              service_desc: true,
             }
           }
         },
         where: {
           user_id: userId,
+          isDeleted: false,
         }
       },
       );

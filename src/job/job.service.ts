@@ -353,7 +353,7 @@ export class JobService {
                 where: {
                     id: jobId,
                     isDeleted: false,
-                    user_id: jobId,
+                    user_id: userId,
                 }
             });
 
