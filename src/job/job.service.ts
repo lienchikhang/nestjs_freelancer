@@ -341,13 +341,15 @@ export class JobService {
         try {
 
             //check subId exist
-            const isSubExist = await this.prisma.subs.findUnique({
-                where: {
-                    id: subId,
-                }
-            });
+            if (subId) {
+                const isSubExist = await this.prisma.subs.findUnique({
+                    where: {
+                        id: subId,
+                    }
+                });
 
-            if (!isSubExist) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'Sub not found', null));
+                if (!isSubExist) throw new NotFoundException(this.response.create(HttpStatus.NOT_FOUND, 'Sub not found', null));
+            }
 
             const isJobExist = await this.prisma.jobs.findUnique({
                 where: {
