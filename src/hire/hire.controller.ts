@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, UseGuards, Query } from '@nestjs/common';
 import { HireService } from './hire.service';
 import { CreateHireDto } from 'src/libs/dto';
 import { Auth } from 'src/libs/decorators/common.decorator';
@@ -48,8 +48,11 @@ export class HireController {
   @Auth()
   findAllBySeller(
     @User() user,
+    @Query('page') page: string,
+    @Query('pageSize') pageSize: string,
   ) {
-    return this.hireService.findAllBySeller(user.userId);
+    console.log({ page, pageSize });
+    return this.hireService.findAllBySeller(user.userId, page && Number(page), pageSize && Number(pageSize));
   }
 
   @Get('get-detail-service-by-seller/:id')

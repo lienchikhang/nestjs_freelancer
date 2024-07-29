@@ -225,7 +225,9 @@ export class HireService {
 
   }
 
-  async findAllBySeller(userId: number) {
+  async findAllBySeller(userId: number, page: number = 1, pageSize: number = 6) {
+
+    console.log({ page, pageSize });
     try {
       const jobs = await this.prisma.jobs.findMany({
         select: {
@@ -259,11 +261,25 @@ export class HireService {
         where: {
           user_id: userId,
           isDeleted: false,
+        },
+        take: pageSize,
+        skip: (page - 1) * pageSize,
+        orderBy: {
+          id: 'desc',
         }
       },
       );
 
-      return this.response.create(HttpStatus.OK, 'Get successfully!', jobs);
+      const totalJobs = await this.prisma.jobs.count({
+        where: {
+          user_id: userId,
+          isDeleted: false,
+        },
+      });
+
+      const totalPage = Math.ceil(totalJobs / pageSize);
+
+      return this.response.create(HttpStatus.OK, 'Get successfully!', { jobs, page: totalPage });
 
     } catch (error) {
       return this.errorHandler.createError(error.status, error.response);
