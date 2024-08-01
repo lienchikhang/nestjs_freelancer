@@ -110,6 +110,53 @@ export class ServiceService {
     }
   }
 
+  async findAllBySeller(userId: number, page: number = 1, pageSize: number = 6) {
+    try {
+
+      //get services
+      const services = await this.prisma.services.findMany({
+        select: {
+          id: true,
+          price: true,
+          service_level: true,
+          Jobs: {
+            select: {
+              job_name: true,
+              job_image: true,
+            }
+          }
+        },
+        where: {
+          Jobs: {
+            user_id: userId,
+          },
+          isDeleted: false,
+        },
+        take: pageSize,
+        skip: (page - 1) * pageSize,
+      });
+
+      const totalService = await this.prisma.services.count({
+        where: {
+          Jobs: {
+            user_id: userId,
+          },
+          isDeleted: false,
+        },
+      });
+
+      const totalPage = Math.ceil(totalService / pageSize);
+
+      return this.response.create(HttpStatus.OK, 'Get successfull!', { services, page: totalPage });
+
+    } catch (error) {
+      return this.errorHanlder.createError(error.status, error.response);
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
+
   async update(id: number, userId, { deliveryDate, price, serviceBenefit, serviceDesc, serviceLevel }: UpdateServiceDto) {
     try {
 

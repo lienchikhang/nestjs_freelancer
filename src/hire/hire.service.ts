@@ -187,7 +187,7 @@ export class HireService {
   }
 
   //for user checking their hire job
-  async findAll(userId: number) {
+  async findAll(userId: number, page: number = 1, pageSize: number = 6) {
     try {
       //hire
       const hires = await this.prisma.hires.findMany({
@@ -211,10 +211,20 @@ export class HireService {
         },
         where: {
           user_id: userId,
-        }
+        },
+        take: pageSize,
+        skip: (page - 1) * pageSize,
       });
 
-      return this.response.create(HttpStatus.OK, 'Get successfully!', hires);
+      const totalHire = await this.prisma.hires.count({
+        where: {
+          user_id: userId,
+        },
+      });
+
+      const totalPage = Math.ceil(totalHire / pageSize);
+
+      return this.response.create(HttpStatus.OK, 'Get successfully!', { hires, page: totalPage });
 
 
     } catch (error) {
@@ -223,6 +233,32 @@ export class HireService {
       await this.prisma.$disconnect();
     }
 
+  }
+
+  async countAllDone(userId: number) {
+    try {
+      const totalCountDone = await this.prisma.hires.count({
+        where: {
+          user_id: userId,
+          isDone: true,
+          user_confirm: true,
+        },
+      });
+
+      const totalCountAll = await this.prisma.hires.count({
+        where: {
+          user_id: userId,
+        },
+      });
+
+      const result = (totalCountDone * 100 / totalCountAll);
+
+      return this.response.create(HttpStatus.OK, 'Get successfully!', result);
+    } catch (error) {
+      return this.errorHandler.createError(error.status, error.response);
+    } finally {
+      await this.prisma.$disconnect();
+    }
   }
 
   async findAllBySeller(userId: number, page: number = 1, pageSize: number = 6) {

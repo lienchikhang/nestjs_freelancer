@@ -38,8 +38,20 @@ export class HireController {
   @Auth()
   findAll(
     @User() user,
+    @Query('page') page: string,
+    @Query('pageSize') pageSize: string,
   ) {
-    return this.hireService.findAll(user.userId);
+    return this.hireService.findAll(user.userId, page && +page, pageSize && +pageSize);
+  }
+
+  @Get('count-all')
+  @HttpCode(200)
+  @UseGuards(new RoleAuth([ROLE.USER, ROLE.SELLER]))
+  @Auth()
+  countAll(
+    @User() user,
+  ) {
+    return this.hireService.countAllDone(user.userId);
   }
 
   @Get('get-all-by-seller')
@@ -54,6 +66,8 @@ export class HireController {
     console.log({ page, pageSize });
     return this.hireService.findAllBySeller(user.userId, page && Number(page), pageSize && Number(pageSize));
   }
+
+
 
   @Get('get-detail-service-by-seller/:id')
   @HttpCode(200)

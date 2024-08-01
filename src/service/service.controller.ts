@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, UseGuards, Query } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { Auth } from 'src/libs/decorators/common.decorator';
 import { RoleAuth } from 'src/libs/guards/role.guard';
@@ -27,6 +27,18 @@ export class ServiceController {
     @Param('id') jobId: string,
   ) {
     return this.serviceService.findAll(Number(jobId));
+  }
+
+  @Get('get-all-by-seller')
+  @HttpCode(200)
+  @UseGuards(new RoleAuth([ROLE.SELLER]))
+  @Auth()
+  findAllBySeller(
+    @User() user,
+    @Query('page') page: string,
+    @Query('pageSize') pageSize: string,
+  ) {
+    return this.serviceService.findAllBySeller(user.userId, page && +page, pageSize && +pageSize);
   }
 
 
