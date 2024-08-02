@@ -37,6 +37,7 @@ export class VnpayService {
   async createPayment({ price, service, method, bankCode, name, jobId, email, }: CreateVnpayDto) {
     try {
 
+      console.log({ price, service, method, bankCode, name, jobId, email })
       //check user exist
       const userExist = await this.prisma.users.findFirst({
         where: {

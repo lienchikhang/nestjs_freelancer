@@ -113,16 +113,54 @@ export class ServiceService {
   async findAllBySeller(userId: number, page: number = 1, pageSize: number = 6) {
     try {
 
+      const allOrders = await this.prisma.jobs.findMany({
+        select: {
+          Services: {
+            select: {
+              service_level: true,
+              price: true,
+              Hires: {
+                select: {
+                  isDone: true,
+                  createdAt: true,
+                  Users: {
+                    select: {
+                      full_name: true,
+                      avatar: true,
+                    }
+                  }
+                },
+              }
+            }
+          }
+        },
+        where: {
+          user_id: userId,
+
+          isDeleted: false,
+        },
+        take: pageSize,
+        skip: (page - 1) * pageSize,
+      })
+
       //get services
       const services = await this.prisma.services.findMany({
         select: {
           id: true,
           price: true,
           service_level: true,
-          Jobs: {
+          Hires: {
             select: {
-              job_name: true,
-              job_image: true,
+              isDone: true,
+              //order ID
+              id: true,
+              //customer
+              Users: {
+                select: {
+                  full_name: true,
+                  avatar: true,
+                }
+              }
             }
           }
         },
@@ -136,18 +174,22 @@ export class ServiceService {
         skip: (page - 1) * pageSize,
       });
 
-      const totalService = await this.prisma.services.count({
+      const totalService = await this.prisma.jobs.count({
+        // where: {
+        //   Jobs: {
+        //     user_id: userId,
+        //   },
+        //   isDeleted: false,
+        // },
         where: {
-          Jobs: {
-            user_id: userId,
-          },
+          user_id: userId,
           isDeleted: false,
         },
       });
 
       const totalPage = Math.ceil(totalService / pageSize);
 
-      return this.response.create(HttpStatus.OK, 'Get successfull!', { services, page: totalPage });
+      return this.response.create(HttpStatus.OK, 'Get successfull!', { services: allOrders, page: totalPage });
 
     } catch (error) {
       return this.errorHanlder.createError(error.status, error.response);

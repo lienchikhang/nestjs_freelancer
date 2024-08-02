@@ -54,6 +54,17 @@ export class HireController {
     return this.hireService.countAllDone(user.userId);
   }
 
+  @Get('count-all-seller')
+  @HttpCode(200)
+  @UseGuards(new RoleAuth([ROLE.USER, ROLE.SELLER]))
+  @Auth()
+  countAllSeller(
+    @User() user,
+    @Query('serviceId') serviceId: string,
+  ) {
+    return this.hireService.countAllServicesProgress(user.userId, +serviceId);
+  }
+
   @Get('get-all-by-seller')
   @HttpCode(200)
   @UseGuards(new RoleAuth([ROLE.SELLER]))

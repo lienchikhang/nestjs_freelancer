@@ -214,6 +214,9 @@ export class HireService {
         },
         take: pageSize,
         skip: (page - 1) * pageSize,
+        orderBy: {
+          createdAt: 'desc',
+        }
       });
 
       const totalHire = await this.prisma.hires.count({
@@ -251,9 +254,16 @@ export class HireService {
         },
       });
 
+      console.log({ totalCountDone, totalCountAll })
+
+      // case == 0
+      if (!totalCountAll) {
+        return this.response.create(HttpStatus.OK, 'Get successfully!', { result: 0 });
+      }
+
       const result = (totalCountDone * 100 / totalCountAll);
 
-      return this.response.create(HttpStatus.OK, 'Get successfully!', result);
+      return this.response.create(HttpStatus.OK, 'Get successfully!', { result });
     } catch (error) {
       return this.errorHandler.createError(error.status, error.response);
     } finally {
@@ -364,7 +374,7 @@ export class HireService {
     }
   }
 
-  async findServiceBySeller(userId: number, serviceId: number) {
+  async findServiceBySeller(userId: number, serviceId: number, page: number = 1, pageSize: number = 10) {
     try {
 
       //check service exist
@@ -397,18 +407,54 @@ export class HireService {
                 }
               }
             },
+            take: pageSize,
+            skip: (page - 1) * pageSize,
           }
         },
         where: {
           id: serviceId,
           Jobs: {
             user_id: userId,
-          }
-        }
+          },
+        },
       },
       );
 
       return this.response.create(HttpStatus.OK, 'Get successfully!', jobs);
+
+    } catch (error) {
+      return this.errorHandler.createError(error.status, error.response);
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
+
+  async countAllServicesProgress(userId: number, serviceId: number) {
+    try {
+
+      console.log({ serviceId })
+
+      const countAll = await this.prisma.hires.count({
+        where: {
+          service_id: serviceId,
+        }
+      });
+
+      const countDone = await this.prisma.hires.count({
+        where: {
+          service_id: serviceId,
+          isDone: true,
+        }
+      });
+
+      console.log({ countAll, countDone })
+
+      if (!countAll) return this.response.create(HttpStatus.OK, 'Get successfully!', { result: 0 });
+
+      const result = (countDone * 100) / countAll;
+
+      return this.response.create(HttpStatus.OK, 'Get successfully!', { result });
 
     } catch (error) {
       return this.errorHandler.createError(error.status, error.response);
