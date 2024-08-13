@@ -36,18 +36,26 @@ export class CommentService {
       if (hasCommented) throw new BadRequestException(this.response.create(HttpStatus.BAD_REQUEST, 'You have already commented ', null));
 
       //count total comment in job
-      const totalComment = await this.prisma.comments.count({
+      let totalComment = await this.prisma.comments.count({
         where: {
           job_id: jobId,
         },
       });
 
-      const totalRate = await this.prisma.comments.aggregate({
+      let totalRate = await this.prisma.comments.aggregate({
         _sum: {
           rate: true,
-        }
+        },
+        where: {
+          job_id: jobId,
+        },
       });
 
+      if (!totalComment) totalComment = 1;
+
+      if (!totalRate._sum.rate) totalRate._sum.rate = rateNum;
+
+      console.log({ totalComment, totalRate })
 
       const rs = await this.prisma.$transaction([
         this.prisma.comments.create({
@@ -129,6 +137,9 @@ export class CommentService {
         },
         take: pageSize,
         skip: (page - 1) * pageSize,
+        orderBy: {
+          createdAt: "desc",
+        }
       });
 
       const totalComment = await this.prisma.comments.count({
